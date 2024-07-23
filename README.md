@@ -1,6 +1,6 @@
 # OpenVR Display Devices
 
-![Screenshot](./screenshot_standalone.png)
+![Screenshot](./screenshot_standalone.png | width=200) ![Screenshot](./screenshot_steamvr.png | width=200)
 
 ## WTF
 
