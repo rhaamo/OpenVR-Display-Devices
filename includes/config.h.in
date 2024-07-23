@@ -1,0 +1,22 @@
+// Input file for generate includes/config.h
+
+#define xstr(a) str(a)
+#define str(a) #a
+
+#define OPENVR_APPLICATION_KEY "ottpossum.OvrDisplayDevices"
+#define OPENVR_APPLICATION_NAME "OpenVR Display Devices"
+
+#define UPDATE_INTERVAL 0.5
+#define MINIMIZED_MAX_FPS 60.0f
+
+#define BAT_OK IM_COL32(52, 224, 69, 255)
+#define BAT_WARN IM_COL32(224, 173, 52, 255)
+#define BAT_LOW IM_COL32(209, 31, 31, 255)
+#define TRACKING_OK IM_COL32(52, 224, 69, 255)
+#define TRACKING_WAIT IM_COL32(224, 173, 52, 255)
+#define TRACKING_KO IM_COL32(209, 31, 31, 255)
+
+#define APP_VERSION_MAJOR @APP_VERSION_MAJOR@
+#define APP_VERSION_MINOR @APP_VERSION_MINOR@
+
+#define APP_VERSION xstr(APP_VERSION_MAJOR) "." xstr(APP_VERSION_MINOR)

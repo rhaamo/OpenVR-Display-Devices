@@ -1,0 +1,16 @@
+[submodule "3rdparty/imgui"]
+	path = 3rdparty/imgui
+	url = https://github.com/ocornut/imgui
+	branch = master
+[submodule "3rdparty/openvr"]
+	path = 3rdparty/openvr
+	url = https://github.com/ValveSoftware/openvr
+	branch = master
+[submodule "3rdparty/glfw"]
+	path = 3rdparty/glfw
+	url = https://github.com/glfw/glfw
+	branch = master
+[submodule "3rdparty/gl3w"]
+	path = 3rdparty/gl3w
+	url = https://github.com/skaslev/gl3w
+	branch = master
