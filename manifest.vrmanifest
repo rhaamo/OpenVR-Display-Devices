@@ -1,0 +1,16 @@
+{
+	"source" : "builtin",
+	"applications": [{
+		"app_key": "ottpossum.OvrDisplayDevices",
+		"launch_type": "binary",
+		"binary_path_windows": "OpenVR_Display_Devices.exe",
+		"is_dashboard_overlay": true,
+
+		"strings": {
+			"en_us": {
+				"name": "OVR Display Devices",
+				"description": "OpenVR Display Devices"
+			}
+		}
+	}]
+}

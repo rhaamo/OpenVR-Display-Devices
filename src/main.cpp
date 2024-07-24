@@ -7,6 +7,7 @@ static GLuint fboHandle, fboTextureHandle = 0;
 static int fboTextureWidth, fboTextureHeight = 0;
 static vr::VROverlayHandle_t overlayMainHandle, overlayThumbnailHandle = 0;
 static char textBuf[0x400];
+static char cwd[MAX_PATH];
 
 double lastFrameStartTime = glfwGetTime();
 
@@ -212,8 +213,62 @@ void RunLoop() {
     }
 }
 
+static void HandleCommandLine(LPSTR lpCmdLine) {
+    if (strcmp(lpCmdLine, "-installmanifest") == 0) {
+        auto vrErr = vr::VRInitError_None;
+        vr::VR_Init(&vrErr, vr::VRApplication_Utility);
+        if (vrErr == vr::VRInitError_None) {
+            if (vr::VRApplications()->IsApplicationInstalled(OPENVR_APPLICATION_KEY)) {
+                char oldWd[MAX_PATH] = { 0 };
+                auto vrAppErr = vr::VRApplicationError_None;
+                vr::VRApplications()->GetApplicationPropertyString(OPENVR_APPLICATION_KEY, vr::VRApplicationProperty_WorkingDirectory_String, oldWd, MAX_PATH, &vrAppErr);
+				if (vrAppErr != vr::VRApplicationError_None) {
+					fprintf(stderr, "Failed to get old working dir, skipping removal: %s\n", vr::VRApplications()->GetApplicationsErrorNameFromEnum(vrAppErr));
+				} else {
+					std::string manifestPath = oldWd;
+					manifestPath += "\\manifest.vrmanifest";
+					std::cout << "Removing old manifest path: " << manifestPath << std::endl;
+					vr::VRApplications()->RemoveApplicationManifest(manifestPath.c_str());
+				}
+            }
+            std::string manifestPath = cwd;
+			manifestPath += "\\manifest.vrmanifest";
+			std::cout << "Adding manifest path: " << manifestPath << std::endl;
+			auto vrAppErr = vr::VRApplications()->AddApplicationManifest(manifestPath.c_str());
+			if (vrAppErr != vr::VRApplicationError_None) {
+				fprintf(stderr, "Failed to add manifest: %s\n", vr::VRApplications()->GetApplicationsErrorNameFromEnum(vrAppErr));
+			} else {
+				vr::VRApplications()->SetApplicationAutoLaunch(OPENVR_APPLICATION_KEY, true);
+			}
+			vr::VR_Shutdown();
+			exit(-2);
+        }
+        fprintf(stderr, "Failed to initialize OpenVR: %s\n", vr::VR_GetVRInitErrorAsEnglishDescription(vrErr));
+		vr::VR_Shutdown();
+		exit(-2);
+    } else if (strcmp(lpCmdLine, "-removemanifest") == 0) {
+		auto vrErr = vr::VRInitError_None;
+		vr::VR_Init(&vrErr, vr::VRApplication_Utility);
+		if (vrErr == vr::VRInitError_None) {
+			if (vr::VRApplications()->IsApplicationInstalled(OPENVR_APPLICATION_KEY)) {
+				std::string manifestPath = cwd;
+				manifestPath += "\\manifest.vrmanifest";
+				std::cout << "Removing manifest path: " << manifestPath << std::endl;
+				vr::VRApplications()->RemoveApplicationManifest(manifestPath.c_str());
+			}
+			vr::VR_Shutdown();
+			exit(0);
+		}
+		fprintf(stderr, "Failed to initialize OpenVR: %s\n", vr::VR_GetVRInitErrorAsEnglishDescription(vrErr));
+		vr::VR_Shutdown();
+		exit(-2);
+	}
+}
+
 // Main func
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+    HandleCommandLine(lpCmdLine);
+
     if (!glfwInit()) {
         MessageBox(nullptr, L"Failed to initialize GLFW", L"", 0);
         return 0;
