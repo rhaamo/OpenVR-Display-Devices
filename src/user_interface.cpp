@@ -9,11 +9,6 @@ static const ImGuiWindowFlags bareWindowFlags =
 	ImGuiWindowFlags_NoScrollWithMouse |
 	ImGuiWindowFlags_NoCollapse;
 
-bool cfgAlertLowBattery = true;
-float cfgBatteryWarn = 50;
-float cfgBatteryLow = 20;
-bool cfgLoaded = false;
-
 void BuildMainWindow(bool runningInOverlay_) {
     runningInOverlay = runningInOverlay_;
     
@@ -28,9 +23,6 @@ void BuildMainWindow(bool runningInOverlay_) {
     }
 
     ImGui::PushStyleColor(ImGuiCol_PlotHistogram, ImGui::GetStyleColorVec4(ImGuiCol_Button));
-
-    // load config
-
 
     static ImVec2 windowSize = ImGui::GetWindowSize();
     // Top part
@@ -58,7 +50,7 @@ void ShowVersionLine() {
 		ImGui::EndChild();
 		return;
 	}
-	ImGui::Text(OPENVR_APPLICATION_NAME " v" APP_VERSION);
+	ImGui::Text("v%i.%i", APP_VERSION_MAJOR, APP_VERSION_MINOR);
 	if (runningInOverlay) {
 		ImGui::SameLine();
 		ImGui::Text("- close VR overlay to use mouse");
@@ -180,18 +172,18 @@ void Show_StatusTable() {
                 ImGui::Text("%i", i);
 
                 ImGui::TableSetColumnIndex(1); // Class
-                ImGui::Text(deviceClassString);
+                ImGui::Text("%s", deviceClassString);
 
                 ImGui::TableSetColumnIndex(2); // Role (_waist, _foot, given by the driver)
-                ImGui::Text(roleBuffer);
+                ImGui::Text("%s", roleBuffer);
 
                 ImGui::TableSetColumnIndex(3); // Battery %
 
                 // Show battery only for HMD, Controller and Trackers
                 if (deviceClass == 1 || deviceClass == 2 || deviceClass == 3) {
-                    if (deviceBatteryPercent <= (cfgBatteryWarn / 100) && deviceBatteryPercent > (cfgBatteryLow / 100)) {
+                    if (deviceBatteryPercent <= (application_configuration.batteryWarn / 100) && deviceBatteryPercent > (application_configuration.batteryLow / 100)) {
                         ImGui::PushStyleColor(ImGuiCol_Text, BAT_WARN);
-                    } else if (deviceBatteryPercent <= (cfgBatteryLow / 100)) {
+                    } else if (deviceBatteryPercent <= (application_configuration.batteryLow / 100)) {
                         ImGui::PushStyleColor(ImGuiCol_Text, BAT_LOW);
                     } else {
                         ImGui::PushStyleColor(ImGuiCol_Text, BAT_OK);
@@ -209,7 +201,7 @@ void Show_StatusTable() {
                 ImGui::Text("%s, %s\nTRK: %s", manufacturerBuffer, modelNumberBuffer, trackingSystemBuffer);
 
                 ImGui::TableSetColumnIndex(5); // Serial
-                ImGui::Text(serialBuffer);
+                ImGui::Text("%s", serialBuffer);
 
                 ImGui::TableSetColumnIndex(6); // Status (Running_OK, ...) Tracking Result
                 switch (pose->eTrackingResult) {
@@ -236,6 +228,11 @@ void Show_StatusTable() {
                         ImGui::PushStyleColor(ImGuiCol_Text, TRACKING_KO);
                         ImGui::Text("Running_OutOfRange");
                         break;
+                        
+                    case 300:
+                        ImGui::PushStyleColor(ImGuiCol_Text, TRACKING_KO);
+                        ImGui::Text("TrackingResult_Fallback_RotationOnly");
+                        break;
                 }
                 ImGui::PopStyleColor();
             }
@@ -246,13 +243,19 @@ void Show_StatusTable() {
 }
 
 void Show_Settings() {
-    ImGui::Checkbox("Alert Low Battery", &cfgAlertLowBattery);
+    if (ImGui::Checkbox("Alert Low Battery", &application_configuration.alertLowBattery)) {
+        saveConfiguration(application_configuration);
+    }
 
     ImGui::SameLine(0, 1 * ImGui::GetStyle().ItemSpacing.x + 100);
     ImGui::SetNextItemWidth(300);
-    ImGui::SliderFloat("Alert threshold", &cfgBatteryLow, 0, 100, nullptr);
+    if(ImGui::SliderFloat("Alert threshold", &application_configuration.batteryLow, 0, 100, "%.0f")) {
+        saveConfiguration(application_configuration);
+    }
 
     ImGui::SameLine(0, 1 * ImGui::GetStyle().ItemSpacing.x + 100);
     ImGui::SetNextItemWidth(300);
-    ImGui::SliderFloat("Warn threshold", &cfgBatteryWarn, 0, 100, nullptr);
+    if (ImGui::SliderFloat("Warn threshold", &application_configuration.batteryWarn, 0, 100, "%.0f")) {
+        saveConfiguration(application_configuration);
+    }
 }

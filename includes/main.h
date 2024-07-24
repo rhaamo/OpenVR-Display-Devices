@@ -15,6 +15,7 @@
 #include <stdio.h>
 
 #include "config.h"
+#include "configuration.h"
 
 #include <stdexcept>
 #include <iostream>

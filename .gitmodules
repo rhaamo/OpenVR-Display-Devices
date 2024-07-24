@@ -14,3 +14,11 @@
 	path = 3rdparty/gl3w
 	url = https://github.com/skaslev/gl3w
 	branch = master
+[submodule "3rdparty/PlatformFolders"]
+	path = 3rdparty/PlatformFolders
+	url = https://github.com/sago007/PlatformFolders
+	branch = master
+[submodule "3rdparty/simpleini"]
+	path = 3rdparty/simpleini
+	url = https://github.com/brofield/simpleini
+	branch = master

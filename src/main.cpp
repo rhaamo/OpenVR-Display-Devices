@@ -1,5 +1,7 @@
 #include "main.h"
 
+AppConfig application_configuration;
+
 static GLFWwindow *glfwWindow = nullptr;
 static GLuint fboHandle, fboTextureHandle = 0;
 static int fboTextureWidth, fboTextureHeight = 0;
@@ -47,6 +49,7 @@ void CreateGLFWWindow() {
     glfwSwapInterval(1);
     gl3wInit();
 
+    // Minimize the window on start if enabled
     // glfwIconifyWindow(glfwWindow);
 
     ImGui::CreateContext();
@@ -221,6 +224,10 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
     try {
         InitVR();
         CreateGLFWWindow();
+        loadOrInitConfiguration(application_configuration);
+        if (!application_configuration.loaded) {
+            throw std::runtime_error("Config isn't loaded");
+        }
         RunLoop();
         
         vr::VR_Shutdown();

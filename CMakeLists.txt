@@ -1,6 +1,15 @@
 # CMake
 cmake_minimum_required(VERSION 3.10)
 
+set(CMAKE_VERBOSE_MAKEFILE OFF)
+set(BUILD_SHARED_LIBS OFF)
+
+# set(CMAKE_C_COMPILER clang.exe)
+# set(CMAKE_CXX_COMPILER clang++.exe)
+
+# Or else it will not find libgcc_s_seh-1.dll :<
+set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")
+
 set(project OpenVR_Display_Devices)
 set(version_major 0)
 set(version_minor 1)
@@ -15,26 +24,30 @@ set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/bin)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
-# Or else it will not find libgcc_s_seh-1.dll :<
-set(CMAKE_EXE_LINKER_FLAGS "-static")
+# set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+# set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 # Sources
 file(GLOB_RECURSE SOURCES src/*.cpp
                           3rdparty/gl3w/*.c
+                          3rdparty/PlatformFolders/sago/*.cpp
                           )
 # file(GLOB_RECURSE HEADERS includes/*.hpp includes/*.h)
 
 # Executable stuff
-add_executable(${PROJECT_NAME} WIN32 ${SOURCES})
-target_include_directories(OpenVR_Display_Devices PUBLIC includes/
+#add_executable(${PROJECT_NAME} WIN32 ${SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES})
+target_include_directories(${PROJECT_NAME} PUBLIC includes/
                                         3rdparty/gl3w/
                                         3rdparty/imgui/
                                         3rdparty/imgui/backends
+                                        3rdparty/PlatformFolders/sago/
+                                        3rdparty/simpleini/
                                         ${PROJECT_BINARY_DIR}/includes/)
 
 # OpenVR
-target_include_directories(OpenVR_Display_Devices PUBLIC 3rdparty/openvr/headers)
-target_link_libraries(OpenVR_Display_Devices ${CMAKE_SOURCE_DIR}/3rdparty/openvr/lib/win64/openvr_api.lib)
+target_include_directories(${PROJECT_NAME} PUBLIC 3rdparty/openvr/headers)
+target_link_libraries(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/3rdparty/openvr/lib/win64/openvr_api.lib)
 # should be /Debug but whatever
 file(COPY ${CMAKE_SOURCE_DIR}/3rdparty/openvr/bin/win64/openvr_api.dll DESTINATION ${CMAKE_BINARY_DIR})
 
@@ -43,15 +56,15 @@ set(GLFW_BUILD_DOCS OFF CACHE BOOL "Docs")
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "Examples")
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "Tests")
 add_subdirectory(${CMAKE_SOURCE_DIR}/3rdparty/glfw/)
-add_dependencies(OpenVR_Display_Devices glfw)
-target_include_directories(OpenVR_Display_Devices PUBLIC 3rdparty/glfw/include)
-target_link_libraries(OpenVR_Display_Devices glfw ${GLFW_LIBRARIES})
+add_dependencies(${PROJECT_NAME} glfw)
+target_include_directories(${PROJECT_NAME} PUBLIC 3rdparty/glfw/include)
+target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES})
 
 # Imgui
-# target_include_directories(OpenVR_Display_Devices PUBLIC 3rdparty/imgui)
-# target_include_directories(OpenVR_Display_Devices PUBLIC 3rdparty/imgui/examples)
+# target_include_directories(${PROJECT_NAME} PUBLIC 3rdparty/imgui)
+# target_include_directories(${PROJECT_NAME} PUBLIC 3rdparty/imgui/examples)
 # add_library(imgui SHARED ${IMGUI_SOURCES} ${IMGUI_HEADERS})
-# target_link_libraries(OpenVR_Display_Devices imgui)
+# target_link_libraries(${PROJECT_NAME} imgui)
 
 set(IMGUI_PATH ${CMAKE_SOURCE_DIR}/3rdparty/imgui)
 
@@ -97,7 +110,7 @@ add_library(${project}::im-opengl3 ALIAS im-opengl3)
 
 # OpenGL
 find_package(OpenGL REQUIRED)
-target_link_libraries(OpenVR_Display_Devices ${OPENGL_gl_LIBRARY})
+target_link_libraries(${PROJECT_NAME} ${OPENGL_gl_LIBRARY})
 
 target_link_libraries(
     ${CMAKE_DL_LIBS}
@@ -108,4 +121,4 @@ target_link_libraries(
     im-opengl3
 )
 
-target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)

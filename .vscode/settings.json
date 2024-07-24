@@ -78,6 +78,9 @@
         "xtr1common": "cpp",
         "xtree": "cpp",
         "xutility": "cpp",
-        "any": "cpp"
+        "any": "cpp",
+        "cinttypes": "cpp",
+        "filesystem": "cpp",
+        "chrono": "cpp"
     }
 }

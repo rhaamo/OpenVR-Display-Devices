@@ -4,6 +4,7 @@
 #define UNICODE
 
 #include "config.h"
+#include "configuration.h"
 
 #include <imgui.h>
 #include <openvr.h>
