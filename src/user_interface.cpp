@@ -26,14 +26,14 @@ void BuildMainWindow(bool runningInOverlay_) {
 
     static ImVec2 windowSize = ImGui::GetWindowSize();
     // Top part
-    ImGui::BeginChild("statusTable", { windowSize.x, windowSize.y - 100 }, ImGuiChildFlags_AlwaysUseWindowPadding, ImGuiWindowFlags_NoSavedSettings);
+    ImGui::BeginChild("statusTable", { windowSize.x, windowSize.y - 200 }, 0, ImGuiWindowFlags_NoSavedSettings);
     ImGui::SetWindowFontScale(0.8f);
     Show_StatusTable();
     ImGui::SetWindowFontScale(1.0f);
     ImGui::EndChild();
 
     // Bottom part
-    ImGui::BeginChild("settingsTable", { windowSize.x, 100 }, ImGuiChildFlags_AlwaysUseWindowPadding, ImGuiWindowFlags_NoSavedSettings);
+    ImGui::BeginChild("settingsTable", { windowSize.x, 200 }, 0, ImGuiWindowFlags_NoSavedSettings);
     Show_Settings();
     ImGui::EndChild();
 
@@ -257,5 +257,14 @@ void Show_Settings() {
     ImGui::SetNextItemWidth(300);
     if (ImGui::SliderFloat("Warn threshold", &application_configuration.batteryWarn, 0, 100, "%.0f")) {
         saveConfiguration(application_configuration);
+    }
+
+    ImGui::NewLine();
+    if (ImGui::Checkbox("Windows notifications (not implemented)", &application_configuration.notificationsWindows)) {
+        enableWindowsNotifications();
+    }
+    ImGui::SameLine(0, 1 * ImGui::GetStyle().ItemSpacing.x + 100);
+    if (ImGui::Checkbox("XSOverlay notifications (not implemented)", &application_configuration.notificationsXsOverlay)) {
+        enableXsOverlayNotifications();
     }
 }

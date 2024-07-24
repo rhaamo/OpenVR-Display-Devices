@@ -42,6 +42,8 @@ void loadOrInitConfiguration(AppConfig &app_cfg) {
         app_cfg.alertLowBattery = cfgIni.GetBoolValue("battery_alert", "alert_low_on_battery", false, nullptr);
         app_cfg.batteryWarn = cfgIni.GetDoubleValue("battery_alert", "battery_warn", 50, nullptr);
         app_cfg.batteryLow = cfgIni.GetDoubleValue("battery_alert", "battery_low", 20, nullptr);
+        app_cfg.notificationsWindows = cfgIni.GetBoolValue("notifications", "notifications_windows", false, nullptr);
+        app_cfg.notificationsXsOverlay = cfgIni.GetBoolValue("notifications", "notifications_xsoverlay", false, nullptr);
 
         // Then set the config to the loaded state
         app_cfg.loaded = true;
@@ -64,6 +66,12 @@ void saveConfiguration(AppConfig &cfg) {
         }
         if (cfgIni.SetDoubleValue("battery_alert", "battery_low", cfg.batteryLow) < 0) {
             throw std::runtime_error("Cannot save batteryLow to config");
+        }
+        if (cfgIni.SetBoolValue("notifications", "notifications_windows", cfg.notificationsWindows) < 0) {
+            throw std::runtime_error("Cannot save notificationsWindows to config");
+        }
+        if (cfgIni.SetBoolValue("notifications", "notifications_xsoverlay", cfg.notificationsXsOverlay) < 0) {
+            throw std::runtime_error("Cannot save notificationsXsOverlay to config");
         }
 
         SI_Error rc = cfgIni.SaveFile(configFile.c_str());

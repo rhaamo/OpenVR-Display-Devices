@@ -5,6 +5,7 @@
 
 #include "config.h"
 #include "configuration.h"
+#include "notifications.h"
 
 #include <imgui.h>
 #include <openvr.h>
