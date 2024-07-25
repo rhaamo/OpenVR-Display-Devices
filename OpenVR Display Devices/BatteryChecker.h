@@ -41,8 +41,8 @@ private:
 		sendNotification(title, content);
 	}
 	void dispatchWarnNotification(int index) {
-		std::string title = "Warn tracker battery !";
-		std::string content = std::format("Tracker {} is low on battery: {}%", gaugesNames[index], gauges[index]).c_str();
+		std::string title = "Tracker battery warning !";
+		std::string content = std::format("Tracker {} battery warning: {}%", gaugesNames[index], gauges[index]).c_str();
 
 		std::cout << "WARN battery for tracker '" << gaugesNames[index] << "' id " << index << " level: " << gauges[index] << std::endl;
 		sendNotification(title, content);

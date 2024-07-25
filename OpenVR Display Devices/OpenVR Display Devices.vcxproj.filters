@@ -106,5 +106,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
+    <None Include="..\installer\installer.nsi" />
+    <None Include="manifest.vrmanifest" />
   </ItemGroup>
 </Project>

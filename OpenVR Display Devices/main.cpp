@@ -234,8 +234,24 @@ void RunLoop() {
     }
 }
 
-static void HandleCommandLine(LPSTR lpCmdLine) {
-    if (strcmp(lpCmdLine, "-installmanifest") == 0) {
+static void HandleCommandLine(LPWSTR lpCmdLine) {
+    if (lstrcmp(lpCmdLine, L"-openvrpath") == 0)
+    {
+        auto vrErr = vr::VRInitError_None;
+        vr::VR_Init(&vrErr, vr::VRApplication_Utility);
+        if (vrErr == vr::VRInitError_None) {
+            char cruntimePath[MAX_PATH] = { 0 };
+            unsigned int pathLen;
+            vr::VR_GetRuntimePath(cruntimePath, MAX_PATH, &pathLen);
+
+            printf("%s", cruntimePath);
+            vr::VR_Shutdown();
+            exit(0);
+        }
+        fprintf(stderr, "Failed to initialize OpenVR: %s\n", vr::VR_GetVRInitErrorAsEnglishDescription(vrErr));
+        vr::VR_Shutdown();
+        exit(-2);
+    } else if (lstrcmp(lpCmdLine, L"-installmanifest") == 0) {
         auto vrErr = vr::VRInitError_None;
         vr::VR_Init(&vrErr, vr::VRApplication_Utility);
         if (vrErr == vr::VRInitError_None) {
@@ -270,7 +286,7 @@ static void HandleCommandLine(LPSTR lpCmdLine) {
         vr::VR_Shutdown();
         exit(-2);
     }
-    else if (strcmp(lpCmdLine, "-removemanifest") == 0) {
+    else if (lstrcmp(lpCmdLine, L"-removemanifest") == 0) {
         auto vrErr = vr::VRInitError_None;
         vr::VR_Init(&vrErr, vr::VRApplication_Utility);
         if (vrErr == vr::VRInitError_None) {
@@ -290,10 +306,13 @@ static void HandleCommandLine(LPSTR lpCmdLine) {
 }
 
 // Main func
-int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow) {
+    _getcwd(cwd, MAX_PATH);
     HandleCommandLine(lpCmdLine);
 
+#ifdef _DEBUG
     CreateConsole();
+#endif
 
     if (!glfwInit()) {
         MessageBox(nullptr, L"Failed to initialize GLFW", L"", 0);

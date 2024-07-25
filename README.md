@@ -16,11 +16,19 @@ Model, vendor, tracking type, serial number, battery status and tracking state a
 - Build it
 - ???
 
+To create an installer:
+- Download latest NSIS thingy
+- Open it, click the link to compile a script
+- Load the "installer/installer.nsi" file
+- Compile and execute
+- done
+
 ## TODO
 
 - Try it more
 - Implement notifications through XSOverlay
 - Add ability to be registered as an app by SteamVR (implemented, to be tested)
+- VR Runtime path doesn't return anything ???
 
 ## License
 
