@@ -22,3 +22,6 @@
 	path = 3rdparty/simpleini
 	url = https://github.com/brofield/simpleini
 	branch = master
+[submodule "3rdparty/WinToast"]
+	path = 3rdparty/WinToast
+	url = https://github.com/mohabouje/WinToast

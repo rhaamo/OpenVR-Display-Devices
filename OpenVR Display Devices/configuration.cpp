@@ -16,13 +16,14 @@ bool testAndCreatePathToConfigFile(std::string configPath) {
         if (!std::filesystem::create_directory(configPath)) {
             throw std::runtime_error("Cannot create path to configuration file: " + configPath);
         }
-    } else {
+    }
+    else {
         return true;
     }
     return true;
 }
 
-void loadOrInitConfiguration(AppConfig &app_cfg) {
+void loadOrInitConfiguration(AppConfig& app_cfg) {
     std::string configPath = getConfigFolder();
     cfgIni.SetUnicode();
 
@@ -47,12 +48,13 @@ void loadOrInitConfiguration(AppConfig &app_cfg) {
 
         // Then set the config to the loaded state
         app_cfg.loaded = true;
-    } else {
+    }
+    else {
         throw std::runtime_error("Cannot create path to configuration file");
     }
 }
 
-void saveConfiguration(AppConfig &cfg) {
+void saveConfiguration(AppConfig& cfg) {
     std::string configPath = getConfigFolder();
 
     if (testAndCreatePathToConfigFile(configPath)) {
@@ -78,7 +80,8 @@ void saveConfiguration(AppConfig &cfg) {
         if (rc < 0) {
             throw std::runtime_error("Cannot save configuration file");
         }
-    } else {
+    }
+    else {
         throw std::runtime_error("Cannot create path to configuration file");
     }
 }

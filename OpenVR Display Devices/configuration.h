@@ -22,7 +22,7 @@ struct AppConfig {
 
     // Config section notifications
     bool notificationsWindows = false; // not implemented yet
-    bool notificationsXsOverlay= false;
+    bool notificationsXsOverlay = false;
 
 };
 
@@ -30,5 +30,5 @@ extern AppConfig application_configuration;
 
 std::string getConfigFolder();
 bool testAndCreatePathToConfigFile(std::string configPath);
-void loadOrInitConfiguration(AppConfig &cfg);
-void saveConfiguration(AppConfig &cfg);
+void loadOrInitConfiguration(AppConfig& cfg);
+void saveConfiguration(AppConfig& cfg);
