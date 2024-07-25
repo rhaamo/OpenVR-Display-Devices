@@ -1,5 +1,8 @@
 #pragma once
 
+// lol
+#define UNICODE
+
 #define OPENVR_APPLICATION_KEY "ottpossum.OvrDisplayDevices"
 #define OPENVR_APPLICATION_NAME "OpenVR Display Devices"
 #define APPLICATION_CONFIG_DIR "OpenVR-Display-Devices"

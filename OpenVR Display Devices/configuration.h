@@ -1,8 +1,5 @@
 #pragma once
 
-// lol
-#define UNICODE
-
 #include "config.h"
 
 #include <SimpleIni.h>
