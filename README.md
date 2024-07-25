@@ -10,19 +10,18 @@ Model, vendor, tracking type, serial number, battery status and tracking state a
 
 ## Build
 
-- I developped it with msys2 and VSCode
-- Packages required on msys2 (ucrt environment): `base-devel mingw-w64-ucrt-x86_64-clang mingw-w64-ucrt-x86_64-gdb mingw-w64-x86_64-cmake mingw-w64-x86_64-git mingw-w64-ucrt-x86_64-libconfig mingw-w64-ucrt-x86_64-cmake`
-- `git clone --recursive ` the repository to get the third party libs
-- mkdir build
-- cd build
-- cmake .. && make
-- and uh, maybe it will work for you
+- Clone the repository recursively to get the submodules
+- Alternatively in the CLI after cloning: `git submodule init --update` iirc
+- Load the project in Visual Studio 2022
+- Build it
+- ???
 
 ## TODO
 
 - Try it more
 - Implement notifications through XSOverlay
-- Add ability to be registered as an app by SteamVR
+- Implement actual notifications dispatch for low and warn
+- Add ability to be registered as an app by SteamVR (implemented, to be tested)
 
 ## License
 
