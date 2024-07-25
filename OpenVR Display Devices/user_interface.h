@@ -3,6 +3,7 @@
 #include "config.h"
 #include "configuration.h"
 #include "notifications.h"
+#include "BatteryChecker.h"
 
 #include <windows.h>
 

@@ -72,6 +72,9 @@
     <ClCompile Include="..\3rdparty\WinToast\src\wintoastlib.cpp">
       <Filter>Fichiers sources\WinToast</Filter>
     </ClCompile>
+    <ClCompile Include="BatteryChecker.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
@@ -90,6 +93,9 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="user_interface.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="BatteryChecker.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

@@ -43,7 +43,11 @@ void enableWindowsNotifications() {
         throw std::runtime_error("Woops, error when initializing the WinToaster");
     }
 
-    sendNativeNotification("Test notification", "nya~ :3");
+    std::string title = "Test notification";
+    std::string content = "nya~ :3";
+
+    sendNativeNotification(title, content);
+    std::cout << "Enabled toaster notifications" << std::endl;
 }
 
 void disableWindowsNotifications() {
@@ -52,7 +56,9 @@ void disableWindowsNotifications() {
 
 void enableXsOverlayNotifications() {
     // Todo
-    sendNotification("Test notification", "nya~ :3");
+    std::string title = "Test notification";
+    std::string content = "nya~ :3";
+    sendXsOverlayNotification(title, content);
 }
 
 void disableXsOverlayNotifications() {
@@ -62,26 +68,27 @@ std::wstring charToWstring(const char* src) {
     return std::wstring(src, src + strlen(src));
 }
 
-void sendNativeNotification(char* title, char* msg) {
+void sendNativeNotification(std::string &title, std::string &msg) {
     WinToastLib::WinToastTemplate::AudioOption audioOptions = WinToastLib::WinToastTemplate::AudioOption::Default;
 
     WinToastLib::WinToastTemplate templ(WinToastLib::WinToastTemplate::Text02);
     // Title
-    templ.setTextField(charToWstring(title), WinToastLib::WinToastTemplate::FirstLine);
+    templ.setTextField(charToWstring(title.c_str()), WinToastLib::WinToastTemplate::FirstLine);
     // Content
-    templ.setAttributionText(charToWstring(msg));
+    templ.setAttributionText(charToWstring(msg.c_str()));
     templ.setAudioOption(audioOptions);
-    templ.setExpiration(5);
+    // templ.setExpiration(5);
     if (WinToastLib::WinToast::instance()->showToast(templ, new CustomHandler()) < 0) {
         throw std::runtime_error("Woops, cannot toast :(");
     }
 }
 
-void sendXsOverlayNotification(char* title, char* msg) {
+void sendXsOverlayNotification(std::string &title, std::string& msg) {
 }
 
-void sendNotification(char* title, char* msg) {
+void sendNotification(std::string &title, std::string &msg) {
     if (application_configuration.notificationsWindows) {
+        std::cout << "SN: " << title << std::endl;
         sendNativeNotification(title, msg);
     }
     if (application_configuration.notificationsXsOverlay) {

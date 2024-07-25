@@ -104,7 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>Default</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>..\3rdparty\WinToast\include;..\3rdparty\simpleini;..\3rdparty\imgui\backends;..\3rdparty\imgui;..\3rdparty\openvr\headers;..\3rdparty\gl3w\include;..\3rdparty\glfw\include;..\3rdparty\PlatformFolders\sago;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -141,6 +141,7 @@
     <ClCompile Include="..\3rdparty\imgui\imgui_widgets.cpp" />
     <ClCompile Include="..\3rdparty\PlatformFolders\sago\platform_folders.cpp" />
     <ClCompile Include="..\3rdparty\WinToast\src\wintoastlib.cpp" />
+    <ClCompile Include="BatteryChecker.cpp" />
     <ClCompile Include="configuration.cpp" />
     <ClCompile Include="droid_sans_font.cpp" />
     <ClCompile Include="main.cpp" />
@@ -148,6 +149,7 @@
     <ClCompile Include="user_interface.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BatteryChecker.h" />
     <ClInclude Include="config.h" />
     <ClInclude Include="configuration.h" />
     <ClInclude Include="droid_sans_font.h" />

@@ -17,6 +17,18 @@ processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 extern "C" __declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
 extern "C" __declspec(dllexport) DWORD AmdPowerXpressRequestHighPerformance = 0x00000001;
 
+void CreateConsole() {
+    static bool created = false;
+    if (!created) {
+        AllocConsole();
+        FILE* file = nullptr;
+        freopen_s(&file, "CONIN$", "r", stdin);
+        freopen_s(&file, "CONOUT$", "w", stdout);
+        freopen_s(&file, "CONOUT$", "w", stderr);
+        created = true;
+    }
+}
+
 void GLFWErrorCallback(int error, const char* description) {
     fprintf(stderr, "GLFW Error %d: %s\n", error, description);
 }
@@ -280,6 +292,8 @@ static void HandleCommandLine(LPSTR lpCmdLine) {
 // Main func
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     HandleCommandLine(lpCmdLine);
+
+    CreateConsole();
 
     if (!glfwInit()) {
         MessageBox(nullptr, L"Failed to initialize GLFW", L"", 0);

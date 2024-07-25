@@ -9,6 +9,9 @@ ImGuiWindowFlags_NoScrollbar |
 ImGuiWindowFlags_NoScrollWithMouse |
 ImGuiWindowFlags_NoCollapse;
 
+BatteryChecker batteryChecker;
+
+
 void BuildMainWindow(bool runningInOverlay_) {
     runningInOverlay = runningInOverlay_;
 
@@ -137,6 +140,12 @@ void Show_StatusTable() {
                     MessageBox(nullptr, message, L"Runtime Error", 0);
                 }
 
+                // Fill the state
+                std::string role = roleBuffer;
+                batteryChecker.updateGauge(i, deviceBatteryPercent * 100, role, deviceIsCharging);
+                // Then check the status
+                batteryChecker.checkGaugeAndDispatchNotifications(i);
+
                 // Model
                 char manufacturerBuffer[vr::k_unMaxPropertyStringSize] = "<ERROR>";
                 vr::VRSystem()->GetStringTrackedDeviceProperty(i, vr::Prop_ManufacturerName_String, manufacturerBuffer, vr::k_unMaxPropertyStringSize, &pError);
@@ -162,7 +171,7 @@ void Show_StatusTable() {
 
                 // Status
                 vr::TrackedDevicePose_t poses[vr::k_unMaxTrackedDeviceCount];
-                vr::VRSystem()->GetDeviceToAbsoluteTrackingPose(vr::TrackingUniverseStanding, i, poses, vr::k_unMaxTrackedDeviceCount);
+                vr::VRSystem()->GetDeviceToAbsoluteTrackingPose(vr::TrackingUniverseStanding, 0.0f, poses, vr::k_unMaxTrackedDeviceCount);
                 vr::TrackedDevicePose_t* pose = poses + i;
 
 

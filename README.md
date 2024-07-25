@@ -20,7 +20,6 @@ Model, vendor, tracking type, serial number, battery status and tracking state a
 
 - Try it more
 - Implement notifications through XSOverlay
-- Implement actual notifications dispatch for low and warn
 - Add ability to be registered as an app by SteamVR (implemented, to be tested)
 
 ## License

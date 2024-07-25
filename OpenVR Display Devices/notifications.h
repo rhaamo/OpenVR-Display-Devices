@@ -2,6 +2,7 @@
 
 #include "config.h"
 #include "configuration.h"
+#include <codecvt>
 
 #define XSOVERLAY_WS "ws://localhost:42070/?client=OVRDisplayDevices"
 
@@ -15,6 +16,6 @@ void enableWindowsNotifications();
 void disableWindowsNotifications();
 void enableXsOverlayNotifications();
 void disableXsOverlayNotifications();
-void sendNotification(char* title, char* msg);
-void sendXsOverlayNotification(char* title, char* msg);
-void sendNativeNotification(char* title, char* msg);
+void sendNotification(std::string &title, std::string& msg);
+void sendXsOverlayNotification(std::string& title, std::string& msg);
+void sendNativeNotification(std::string& title, std::string& msg);
