@@ -30,9 +30,14 @@ To create an installer:
 - Try it more
 - VR Runtime path (xxx.exe -runtimepath) doesn't return anything ???
 - Implement a "previous value" for battery statuses, to detect if the device is charging BUT current% is inferior to last%, to send a more specific notification about slow charging
+- The code really needs cleanups, the WebSocket part is absolutely awful, it works, but PR welcome
 
-## License
+## License & contact
 
 MIT License
 
 Some code has been used from https://github.com/hyblocker/OpenVR-SpaceCalibrator for the main ImGUI/glfw/opengl window code.
+
+Contact:
+	- farts at otter dot sh
+	- issues maybe, any other way you can find (good luck)
