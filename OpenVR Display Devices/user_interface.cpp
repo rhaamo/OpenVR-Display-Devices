@@ -282,7 +282,7 @@ void Show_Settings() {
     }
 
     ImGui::SameLine(0, 1 * ImGui::GetStyle().ItemSpacing.x + 100);
-    if (ImGui::Checkbox("XSOverlay notifications (not implemented)", &application_configuration.notificationsXsOverlay)) {
+    if (ImGui::Checkbox("XSOverlay notifications (experimental)", &application_configuration.notificationsXsOverlay)) {
         if (application_configuration.notificationsXsOverlay) {
             enableXsOverlayNotifications();
         } else {
