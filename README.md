@@ -6,7 +6,7 @@
 
 This is a SteamVR Overlay app (and a "standalone" window) that will list all your connected OpenVR devices informations such as: Model, vendor, tracking type, serial number, battery status and tracking state.
 
-It can send notifications of low battery (<20%) and warn (<50%) through native windows toasts or XSOverlay.
+It can send notifications of low battery (<20%) and warn (<50%) through native windows toasts or XSOverlay, it will also notify if a tracker is charging but too slowly that it's discharging.
 
 The configuration file is located in: `%appdata%\OpenVR-Display-Devices\` the `app.ini` file.
 
@@ -31,7 +31,7 @@ To create an installer:
 
 - Try it more
 - VR Runtime path (xxx.exe -runtimepath) doesn't return anything ???
-- Implement a "previous value" for battery statuses, to detect if the device is charging BUT current% is inferior to last%, to send a more specific notification about slow charging
+- WIP to be tested: Implement a "previous value" for battery statuses, to detect if the device is charging BUT current% is inferior to last%, to send a more specific notification about slow charging
 - The code really needs cleanups, the WebSocket part is absolutely awful, it works, but PRs welcomes (I won't bite you)
 
 ## License & contact

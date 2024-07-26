@@ -17,12 +17,13 @@
 class BatteryChecker {
 private:
 	std::array<int, MAX_INDEXES> gauges;
+	std::array<int, MAX_INDEXES> gaugesPrev;
 	std::array<std::string, MAX_INDEXES> gaugesNames;
 	std::array<bool, MAX_INDEXES> gaugesCharging;
 	time_t lastCheck;
 
 	bool validIndex(int index) {
-		if (gauges.empty()) {
+		if (gauges.empty() || gaugesPrev.empty()) {
 			return false;
 		}
 		if (index > MAX_INDEXES) {
@@ -58,6 +59,7 @@ private:
 public:
 	BatteryChecker() {
 		gauges.fill(-99);
+		gaugesPrev.fill(-99);
 		gaugesNames.fill("<unknown>");
 		gaugesCharging.fill(false);
 		lastCheck = time(0);
@@ -66,7 +68,11 @@ public:
 		delete &gauges;
 	}
 	void updateGauge(int index, int value, std::string role, bool charging) {
+		// Set previous value with current value
+		gaugesPrev[index] = gauges[index];
+		// Set current value
 		gauges[index] = value;
+		// Set name and charging
 		gaugesNames[index] = role;
 		gaugesCharging[index] = charging;
 	}
@@ -91,16 +97,19 @@ public:
 			return;
 		}
 
-		// TODO slow charging: if charging && new% < old%
-
 		// Do a check only if lastCheck interval matches
 		if (difftime(time(0), lastCheck) >= CHECK_EVERY) {
-			if (isLow(index)) {
-				dispatchLowNotification(index);
-			} else if (isWarn(index)) {
-				dispatchWarnNotification(index);
+			if (gaugesCharging[index] && (gauges[index] < gaugesPrev[index]) && (gaugesPrev[index] != -99)) {
+				// if charging && val < prevVal && prevVal != -99, then we are discharging while charging
+				dispatchSlowChargeNotification(index);
+			} else {
+				// Then we are not in a discharging condition
+				if (isLow(index)) {
+					dispatchLowNotification(index);
+				} else if (isWarn(index)) {
+					dispatchWarnNotification(index);
+				}
 			}
-			std::cout << "[checkGaugeAndDispatchNotifications] Still ok i guess" << std::endl;
 			// That's it, set check time to current time
 			lastCheck = time(0);
 		}
