@@ -29,6 +29,7 @@ To create an installer:
 
 - Try it more
 - VR Runtime path (xxx.exe -runtimepath) doesn't return anything ???
+- Implement a "previous value" for battery statuses, to detect if the device is charging BUT current% is inferior to last%, to send a more specific notification about slow charging
 
 ## License
 
