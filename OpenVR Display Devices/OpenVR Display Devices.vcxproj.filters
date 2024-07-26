@@ -117,5 +117,6 @@
     <None Include="vcpkg.json" />
     <None Include="..\.gitignore" />
     <None Include=".editorconfig" />
+    <None Include="..\.github\workflows\msbuild-release.yml" />
   </ItemGroup>
 </Project>
