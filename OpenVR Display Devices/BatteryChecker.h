@@ -97,8 +97,7 @@ public:
 		if (difftime(time(0), lastCheck) >= CHECK_EVERY) {
 			if (isLow(index)) {
 				dispatchLowNotification(index);
-			}
-			else if (isWarn(index)) {
+			} else if (isWarn(index)) {
 				dispatchWarnNotification(index);
 			}
 			std::cout << "[checkGaugeAndDispatchNotifications] Still ok i guess" << std::endl;

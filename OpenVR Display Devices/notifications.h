@@ -15,41 +15,41 @@
 
 class CustomHandler : public WinToastLib::IWinToastHandler {
 public:
-    void toastActivated() const {
-        //std::wcout << L"The user clicked in this toast" << std::endl;
-    }
+	void toastActivated() const {
+		//std::wcout << L"The user clicked in this toast" << std::endl;
+	}
 
-    void toastActivated(int actionIndex) const {
-        //std::wcout << L"The user clicked on action #" << actionIndex << std::endl;
-    }
+	void toastActivated(int actionIndex) const {
+		//std::wcout << L"The user clicked on action #" << actionIndex << std::endl;
+	}
 
-    void toastDismissed(WinToastDismissalReason state) const {
-        switch (state) {
-        case UserCanceled:
-            //std::wcout << L"The user dismissed this toast" << std::endl;
-            break;
-        case TimedOut:
-            //std::wcout << L"The toast has timed out" << std::endl;
-            break;
-        case ApplicationHidden:
-            //std::wcout << L"The application hid the toast using ToastNotifier.hide()" << std::endl;
-            break;
-        default:
-            //std::wcout << L"Toast not activated" << std::endl;
-            break;
-        }
-    }
+	void toastDismissed(WinToastDismissalReason state) const {
+		switch (state) {
+			case UserCanceled:
+				//std::wcout << L"The user dismissed this toast" << std::endl;
+				break;
+			case TimedOut:
+				//std::wcout << L"The toast has timed out" << std::endl;
+				break;
+			case ApplicationHidden:
+				//std::wcout << L"The application hid the toast using ToastNotifier.hide()" << std::endl;
+				break;
+			default:
+				//std::wcout << L"Toast not activated" << std::endl;
+				break;
+		}
+	}
 
-    void toastFailed() const {
-        throw std::runtime_error("Error showing current toast");
-    }
+	void toastFailed() const {
+		throw std::runtime_error("Error showing current toast");
+	}
 };
 
 void enableWindowsNotifications();
 void disableWindowsNotifications();
 void enableXsOverlayNotifications();
 void disableXsOverlayNotifications();
-void sendNotification(std::string &title, std::string& msg);
-void sendXsOverlayNotification(std::string& title, std::string& msg);
-void sendNativeNotification(std::string& title, std::string& msg);
+void sendNotification(std::string &title, std::string &msg);
+void sendXsOverlayNotification(std::string &title, std::string &msg);
+void sendNativeNotification(std::string &title, std::string &msg);
 std::string buildXsOverlayJson(std::string title, std::string content);
