@@ -116,5 +116,6 @@
     <None Include="manifest.vrmanifest" />
     <None Include="vcpkg.json" />
     <None Include="..\.gitignore" />
+    <None Include=".editorconfig" />
   </ItemGroup>
 </Project>

@@ -175,6 +175,7 @@
     <None Include="..\.gitignore" />
     <None Include="..\installer\installer.nsi" />
     <None Include="..\README.md" />
+    <None Include=".editorconfig" />
     <None Include="manifest.vrmanifest" />
     <None Include="vcpkg.json" />
   </ItemGroup>
