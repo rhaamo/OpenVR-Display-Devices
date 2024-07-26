@@ -1,5 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/c,c++,git,cmake,linux,macos,ninja,windows,visualstudio
-# Edit at https://www.toptal.com/developers/gitignore?templates=c,c++,git,cmake,linux,macos,ninja,windows,visualstudio
+# Created by https://www.toptal.com/developers/gitignore/api/c,c++,git,cmake,linux,macos,ninja,windows,vcpkg,visualstudio
+# Edit at https://www.toptal.com/developers/gitignore?templates=c,c++,git,cmake,linux,macos,ninja,windows,vcpkg,visualstudio
 
 ### C ###
 # Prerequisites
@@ -157,6 +157,14 @@ Temporary Items
 ### Ninja ###
 .ninja_deps
 .ninja_log
+
+### vcpkg ###
+# Vcpkg
+
+vcpkg-manifest-install.log
+
+## Manifest Mode
+vcpkg_installed/
 
 ### Windows ###
 # Windows thumbnail cache files
@@ -575,5 +583,4 @@ FodyWeavers.xsd
 ### VisualStudio Patch ###
 # Additional files built by Visual Studio
 
-# End of https://www.toptal.com/developers/gitignore/api/c,c++,git,cmake,linux,macos,ninja,windows,visualstudio
-
+# End of https://www.toptal.com/developers/gitignore/api/c,c++,git,cmake,linux,macos,ninja,windows,vcpkg,visualstudio

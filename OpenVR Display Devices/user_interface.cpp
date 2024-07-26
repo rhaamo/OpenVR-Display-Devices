@@ -290,4 +290,11 @@ void Show_Settings() {
         }
         saveConfiguration(application_configuration);
     }
+
+    ImGui::SameLine(0, 1 * ImGui::GetStyle().ItemSpacing.x + 100);
+    if (ImGui::Button("Test notifications", ImVec2(0, 0))) {
+        std::string title = "Test notification";
+        std::string content = "nya nya nya~";
+        sendNotification(title, content);
+    }
 }

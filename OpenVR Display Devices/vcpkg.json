@@ -1,0 +1,13 @@
+{
+  "dependencies": [
+    "boost",
+    "nlohmann-json"
+  ],
+  "builtin-baseline": "6062c8fe02d38b10d5291411bc235ae4d02cfe6c",
+  "overrides": [
+    {
+      "name": "libffi",
+      "version": "3.4.2#6"
+    }
+  ]
+}

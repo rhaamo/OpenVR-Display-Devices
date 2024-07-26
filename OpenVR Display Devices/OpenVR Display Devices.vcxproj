@@ -154,6 +154,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="notifications.cpp" />
     <ClCompile Include="user_interface.cpp" />
+    <ClCompile Include="Webchaussette.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BatteryChecker.h" />
@@ -163,6 +164,7 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="notifications.h" />
     <ClInclude Include="user_interface.h" />
+    <ClInclude Include="Webchaussette.h" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\3rdparty\openvr\bin\win64\openvr_api.dll">
@@ -170,9 +172,11 @@
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\.gitignore" />
     <None Include="..\installer\installer.nsi" />
     <None Include="..\README.md" />
     <None Include="manifest.vrmanifest" />
+    <None Include="vcpkg.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

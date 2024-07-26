@@ -3,6 +3,12 @@
 // lol
 #define UNICODE
 
+// To avoid windows.h to redefine min() and max()
+#define NOMINMAX
+
+// lol2: Somehow needs to be "first" to avoid boost::asio and winsock/winsock2 conflict...
+#include <winsock2.h>
+
 #define OPENVR_APPLICATION_KEY "ottpossum.OvrDisplayDevices"
 #define OPENVR_APPLICATION_NAME "OpenVR Display Devices"
 #define APPLICATION_CONFIG_DIR "OpenVR-Display-Devices"
@@ -19,6 +25,3 @@
 
 #define APP_VERSION_MAJOR 0
 #define APP_VERSION_MINOR 1
-
-// To avoid windows.h to redefine min() and max()
-#define NOMINMAX

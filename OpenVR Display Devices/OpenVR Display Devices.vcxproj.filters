@@ -75,6 +75,9 @@
     <ClCompile Include="BatteryChecker.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="Webchaussette.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
@@ -98,6 +101,9 @@
     <ClInclude Include="BatteryChecker.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="Webchaussette.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\3rdparty\openvr\bin\win64\openvr_api.dll">
@@ -108,5 +114,7 @@
     <None Include="..\README.md" />
     <None Include="..\installer\installer.nsi" />
     <None Include="manifest.vrmanifest" />
+    <None Include="vcpkg.json" />
+    <None Include="..\.gitignore" />
   </ItemGroup>
 </Project>

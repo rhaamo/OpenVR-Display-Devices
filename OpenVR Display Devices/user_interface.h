@@ -16,7 +16,6 @@
 #include <any>
 
 void BuildMainWindow(bool runningInOverlay);
-void RequestImmediateRedraw();
 void ShowVersionLine();
 void Show_StatusTable();
 void Show_Settings();

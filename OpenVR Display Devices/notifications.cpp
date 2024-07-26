@@ -1,36 +1,6 @@
 #include "notifications.h"
 
-class CustomHandler : public WinToastLib::IWinToastHandler {
-public:
-    void toastActivated() const {
-        //std::wcout << L"The user clicked in this toast" << std::endl;
-    }
-
-    void toastActivated(int actionIndex) const {
-        //std::wcout << L"The user clicked on action #" << actionIndex << std::endl;
-    }
-
-    void toastDismissed(WinToastDismissalReason state) const {
-        switch (state) {
-        case UserCanceled:
-            //std::wcout << L"The user dismissed this toast" << std::endl;
-            break;
-        case TimedOut:
-            //std::wcout << L"The toast has timed out" << std::endl;
-            break;
-        case ApplicationHidden:
-            //std::wcout << L"The application hid the toast using ToastNotifier.hide()" << std::endl;
-            break;
-        default:
-            //std::wcout << L"Toast not activated" << std::endl;
-            break;
-        }
-    }
-
-    void toastFailed() const {
-        throw std::runtime_error("Error showing current toast");
-    }
-};
+Webchaussette wsClient(XSOVERLAY_WS_HOST, XSOVERLAY_WS_PORT, XSOVERLAY_WS_QUERY);
 
 void enableWindowsNotifications() {
     if (!WinToastLib::WinToast::isCompatible()) {
@@ -55,13 +25,40 @@ void disableWindowsNotifications() {
 }
 
 void enableXsOverlayNotifications() {
-    // Todo
+    wsClient.Start();
+
     std::string title = "Test notification";
     std::string content = "nya~ :3";
     sendXsOverlayNotification(title, content);
+    std::cout << "Enabled XSOverlay notifications" << std::endl;
+}
+
+std::string buildXsOverlayJson(std::string title, std::string content) {
+    nlohmann::json jNotification = {
+        {"title", title},
+        {"content", content},
+        {"timeout", 3},
+        {"height", "150"},
+        {"opacity", 1},
+        {"volume", 1},
+        {"audioPath", "default"},
+        {"icon", nullptr},
+        {"sourceApp", ""},
+        {"type", 1},
+        {"useBase64Icon", false}
+    };
+    nlohmann::json jWrapper = {
+        {"sender", "OVRDisplayDevices"},
+        {"target", "xsoverlay"},
+        {"command", "SendNotification"},
+        {"jsonData", jNotification.dump()},
+        {"rawData", nullptr}
+    };
+    return jWrapper.dump();
 }
 
 void disableXsOverlayNotifications() {
+    wsClient.Stop();
 }
 
 std::wstring charToWstring(const char* src) {
@@ -84,6 +81,8 @@ void sendNativeNotification(std::string &title, std::string &msg) {
 }
 
 void sendXsOverlayNotification(std::string &title, std::string& msg) {
+    std::string jmsg = buildXsOverlayJson(title, msg);
+    wsClient.Send(jmsg);
 }
 
 void sendNotification(std::string &title, std::string &msg) {

@@ -332,13 +332,24 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
         } else {
             disableWindowsNotifications();
         }
+        if (application_configuration.notificationsXsOverlay) {
+            enableXsOverlayNotifications();
+        }
+        else {
+            disableXsOverlayNotifications();
+        }
 
         if (!application_configuration.loaded) {
             throw std::runtime_error("Config isn't loaded");
         }
         RunLoop();
 
-        // should close the WS here
+        if (application_configuration.notificationsWindows) {
+            disableWindowsNotifications();
+        }
+        if (application_configuration.notificationsXsOverlay) {
+            disableXsOverlayNotifications();
+        }
 
         vr::VR_Shutdown();
 
