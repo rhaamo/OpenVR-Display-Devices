@@ -18,6 +18,8 @@ The configuration file is located in: `%appdata%\OpenVR-Display-Devices\` the `a
 - Build it
 - ???
 
+Notes that the project uses VCPKG, so you might have to need to open the dev prompt from your project and do something like `vcpkg integrate install` maybe idk
+
 To create an installer:
 - Download latest NSIS thingy
 - Open it, click the link to compile a script
