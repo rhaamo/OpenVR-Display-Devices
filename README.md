@@ -39,5 +39,5 @@ MIT License
 Some code has been used from https://github.com/hyblocker/OpenVR-SpaceCalibrator for the main ImGUI/glfw/opengl window code.
 
 Contact:
-	- farts at otter dot sh
-	- issues maybe, any other way you can find (good luck)
+- farts at otter dot sh
+- issues maybe, any other way you can find (good luck)
