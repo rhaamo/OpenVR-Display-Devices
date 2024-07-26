@@ -172,6 +172,7 @@
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\.github\workflows\msbuild-release.yml" />
     <None Include="..\.gitignore" />
     <None Include="..\installer\installer.nsi" />
     <None Include="..\README.md" />

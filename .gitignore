@@ -1,6 +1,8 @@
 # Created by https://www.toptal.com/developers/gitignore/api/c,c++,git,cmake,linux,macos,ninja,windows,vcpkg,visualstudio
 # Edit at https://www.toptal.com/developers/gitignore?templates=c,c++,git,cmake,linux,macos,ninja,windows,vcpkg,visualstudio
 
+# THIS FILE HAS BEEN CUSTOMISED PLS DONT FUCKUP IT THANK U
+
 ### C ###
 # Prerequisites
 *.d
@@ -21,13 +23,15 @@
 *.pch
 
 # Libraries
-*.lib
+# INCLUDE THEM
+#*.lib
 *.a
 *.la
 *.lo
 
 # Shared objects (inc. Windows DLLs)
-*.dll
+# INCLUDE THEM
+#*.dll
 *.so
 *.so.*
 *.dylib
