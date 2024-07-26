@@ -4,9 +4,11 @@
 
 ## WTF is that
 
-This is standalone and SteamVR Overlay app that will list all your connected OpenVR devices informations.
+This is a SteamVR Overlay app (and a "standalone" window) that will list all your connected OpenVR devices informations such as: Model, vendor, tracking type, serial number, battery status and tracking state.
 
-Model, vendor, tracking type, serial number, battery status and tracking state are shown.
+It can send notifications of low battery (<20%) and warn (<50%) through native windows toasts or XSOverlay.
+
+The configuration file is located in: `%appdata%\OpenVR-Display-Devices\` the `app.ini` file.
 
 ## Build
 
@@ -26,9 +28,7 @@ To create an installer:
 ## TODO
 
 - Try it more
-- Implement notifications through XSOverlay
-- Add ability to be registered as an app by SteamVR (implemented, to be tested)
-- VR Runtime path doesn't return anything ???
+- VR Runtime path (xxx.exe -runtimepath) doesn't return anything ???
 
 ## License
 
