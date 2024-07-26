@@ -10,10 +10,6 @@
 	path = 3rdparty/glfw
 	url = https://github.com/glfw/glfw
 	branch = master
-[submodule "3rdparty/gl3w"]
-	path = 3rdparty/gl3w
-	url = https://github.com/skaslev/gl3w
-	branch = master
 [submodule "3rdparty/PlatformFolders"]
 	path = 3rdparty/PlatformFolders
 	url = https://github.com/sago007/PlatformFolders
