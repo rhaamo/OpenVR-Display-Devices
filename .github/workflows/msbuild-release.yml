@@ -1,12 +1,8 @@
-# This doesn't really work, it fails to find glfw3.lib somehow...
-
-name: MSBuild
+name: msbuild-release
 
 on:
   push:
-    branches: [ "test" ]
-  pull_request:
-    branches: [ "test" ]
+    branches: [ "main" ]
 
 env:
   # Path to the solution file relative to the root of the project.
@@ -62,4 +58,8 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: Installer
-        path: installer\OpenVR-DisplayDevices.exe
+        path: |
+            installer\OpenVR-DisplayDevices.exe
+            README.md
+            LICENSE
+        retention-days: 5
