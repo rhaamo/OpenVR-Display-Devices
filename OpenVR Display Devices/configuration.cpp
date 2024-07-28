@@ -40,6 +40,7 @@ void loadOrInitConfiguration(AppConfig &app_cfg) {
 
 		// Then set the struct from config
 		app_cfg.alertLowBattery = cfgIni.GetBoolValue("battery_alert", "alert_low_on_battery", false, nullptr);
+		app_cfg.alertHmdCycling = cfgIni.GetBoolValue("battery_alert", "alert_hmd_cycling", false, nullptr);
 		app_cfg.batteryWarn = cfgIni.GetDoubleValue("battery_alert", "battery_warn", 50, nullptr);
 		app_cfg.batteryLow = cfgIni.GetDoubleValue("battery_alert", "battery_low", 20, nullptr);
 		app_cfg.notificationsWindows = cfgIni.GetBoolValue("notifications", "notifications_windows", false, nullptr);
@@ -60,6 +61,9 @@ void saveConfiguration(AppConfig &cfg) {
 
 		if (cfgIni.SetBoolValue("battery_alert", "alert_low_on_battery", cfg.alertLowBattery) < 0) {
 			throw std::runtime_error("Cannot save alertLowBattery to config");
+		}
+		if (cfgIni.SetBoolValue("battery_alert", "alert_hmd_cycling", cfg.alertHmdCycling) < 0) {
+			throw std::runtime_error("Cannot save alertHmdCycling to config");
 		}
 		if (cfgIni.SetDoubleValue("battery_alert", "battery_warn", cfg.batteryWarn) < 0) {
 			throw std::runtime_error("Cannot save batteryWarn to config");

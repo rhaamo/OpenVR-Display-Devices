@@ -144,7 +144,7 @@ void Show_StatusTable() {
 				std::string role = roleBuffer;
 				batteryChecker.updateGauge(i, deviceBatteryPercent * 100, role, deviceIsCharging);
 				// Then check the status
-				batteryChecker.checkGaugeAndDispatchNotifications(i);
+				batteryChecker.checkGaugeAndDispatchNotifications(i, (deviceClass == vr::TrackedDeviceClass_HMD));
 
 				// Model
 				char manufacturerBuffer[vr::k_unMaxPropertyStringSize] = "<ERROR>";
@@ -285,6 +285,11 @@ void Show_Settings() {
 		} else {
 			disableXsOverlayNotifications();
 		}
+		saveConfiguration(application_configuration);
+	}
+
+	ImGui::SameLine(0, 1 * ImGui::GetStyle().ItemSpacing.x + 100);
+	if (ImGui::Checkbox("Notify HMD Charge status change", &application_configuration.alertHmdCycling)) {
 		saveConfiguration(application_configuration);
 	}
 

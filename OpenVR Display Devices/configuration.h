@@ -17,10 +17,11 @@ struct AppConfig {
 	float batteryWarn = 50;
 	float batteryLow = 20;
 
+	bool alertHmdCycling = false;
+
 	// Config section notifications
 	bool notificationsWindows = false; // not implemented yet
 	bool notificationsXsOverlay = false;
-
 };
 
 extern AppConfig application_configuration;

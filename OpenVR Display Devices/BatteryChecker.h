@@ -13,6 +13,8 @@
 #define MAX_INDEXES 20
 // Every five minutes
 #define CHECK_EVERY 5 * 60
+// Every 10s
+#define CHECK_CHG_EVERY 10
 
 class BatteryChecker {
 private:
@@ -20,6 +22,8 @@ private:
 	std::array<int, MAX_INDEXES> gaugesPrev;
 	std::array<std::string, MAX_INDEXES> gaugesNames;
 	std::array<bool, MAX_INDEXES> gaugesCharging;
+	std::array<bool, MAX_INDEXES> gaugesChargingPrev;
+	std::array<time_t, MAX_INDEXES> gaugesChargingChangeTime;
 	time_t lastCheck;
 
 	bool validIndex(int index) {
@@ -55,6 +59,19 @@ private:
 		std::cout << "WARN charging too slow for tracker '" << gaugesNames[index] << "' id " << index << " level: " << gauges[index] << std::endl;
 		sendNotification(title, content);
 	}
+	void dispatchChargeWarn(int index) {
+		std::string title, content;
+		if (gaugesCharging[index]) {
+			title = "HMD is now charging";
+			content = std::format("HMD is now charging");
+		} else {
+			title = "HMD not charging !";
+			content = std::format("WOOP WOOP PLS CHECK CABLE");
+		}
+
+		std::cout << "HMD Charge changed from " << gaugesChargingPrev[index] << " to " << gaugesCharging[index] << std::endl;
+		sendNotification(title, content);
+	}
 
 public:
 	BatteryChecker() {
@@ -62,6 +79,8 @@ public:
 		gaugesPrev.fill(-99);
 		gaugesNames.fill("<unknown>");
 		gaugesCharging.fill(false);
+		gaugesChargingPrev.fill(false);
+		gaugesChargingChangeTime.fill(time(0));
 		lastCheck = time(0);
 	}
 	~BatteryChecker() {
@@ -74,6 +93,13 @@ public:
 		gauges[index] = value;
 		// Set name and charging
 		gaugesNames[index] = role;
+
+		if (gaugesCharging[index] != charging) {
+			// If the last charging state is different that new one, update the charging change time index
+			gaugesChargingChangeTime[index] = time(0);
+			// And set previous value
+			gaugesChargingPrev[index] = gaugesCharging[index];
+		}
 		gaugesCharging[index] = charging;
 	}
 	bool isWarn(int index) {
@@ -90,7 +116,7 @@ public:
 
 		return (gauges[index] <= application_configuration.batteryLow);
 	}
-	void checkGaugeAndDispatchNotifications(int index) {
+	void checkGaugeAndDispatchNotifications(int index, bool isHmd) {
 		// First check we have a valid index
 		if (!validIndex(index)) {
 			std::cout << "[checkGaugeAndDispatchNotifications] We have an invalid index lol" << std::endl;
@@ -113,6 +139,16 @@ public:
 			// That's it, set check time to current time
 			lastCheck = time(0);
 		}
+
+		// Every X minutes, check for the state change
+		std::cout << "prev= " << gaugesChargingPrev[index] << " new: " << gaugesCharging[index] << std::endl;
+
+		if (isHmd && (gaugesChargingPrev[index] != gaugesCharging[index]) && (difftime(time(0), gaugesChargingChangeTime[index]) >= CHECK_CHG_EVERY)) {
+			dispatchChargeWarn(index);
+			// Reset time
+			gaugesChargingChangeTime[index] = time(0);
+		}
+
 		// Do nothing as we still haven't waited enough
 	}
 };

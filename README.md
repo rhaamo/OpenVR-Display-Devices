@@ -1,4 +1,4 @@
-# OpenVR Display Devices
+﻿# OpenVR Display Devices
 
 <img src="./screenshot_standalone.png" width="600px"> <img src="./screenshot_steamvr.png" width="400px">
 
@@ -7,6 +7,10 @@
 This is a SteamVR Overlay app (and a "standalone" window) that will list all your connected OpenVR devices informations such as: Model, vendor, tracking type, serial number, battery status and tracking state.
 
 It can send notifications of low battery (<20%) and warn (<50%) through native windows toasts or XSOverlay, it will also notify if a tracker is charging but too slowly that it's discharging.
+
+You can also get notification specific for your HMD when the charging state changes (lol @ android).
+
+Yes this app also works if you only have an HMD without trackers, it's a bit overkill, but it works™️
 
 The configuration file is located in: `%appdata%\OpenVR-Display-Devices\` the `app.ini` file.
 
