@@ -140,13 +140,15 @@ public:
 			lastCheck = time(0);
 		}
 
+		if (application_configuration.alertHmdCycling) {
 		// Every X minutes, check for the state change
-		std::cout << "prev= " << gaugesChargingPrev[index] << " new: " << gaugesCharging[index] << std::endl;
-
-		if (isHmd && (gaugesChargingPrev[index] != gaugesCharging[index]) && (difftime(time(0), gaugesChargingChangeTime[index]) >= CHECK_CHG_EVERY)) {
-			dispatchChargeWarn(index);
-			// Reset time
-			gaugesChargingChangeTime[index] = time(0);
+			if (isHmd && (gaugesChargingPrev[index] != gaugesCharging[index]) && (difftime(time(0), gaugesChargingChangeTime[index]) >= CHECK_CHG_EVERY)) {
+				dispatchChargeWarn(index);
+				// Reset time
+				gaugesChargingChangeTime[index] = time(0);
+				// Then reset previous gauge state
+				gaugesChargingPrev[index] = gaugesCharging[index];
+			}
 		}
 
 		// Do nothing as we still haven't waited enough

@@ -37,6 +37,7 @@ To create an installer:
 - VR Runtime path (xxx.exe -runtimepath) doesn't return anything ???
 - WIP to be tested: Implement a "previous value" for battery statuses, to detect if the device is charging BUT current% is inferior to last%, to send a more specific notification about slow charging
 - The code really needs cleanups, the WebSocket part is absolutely awful, it works, but PRs welcomes (I won't bite you)
+- Properly detect when a device is disconnected because they are still returned by the API
 
 ## License & contact
 
