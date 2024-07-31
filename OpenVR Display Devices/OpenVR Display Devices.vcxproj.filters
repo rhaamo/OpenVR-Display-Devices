@@ -30,7 +30,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="OpenVR-Display-Devices.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="configuration.cpp">
@@ -89,7 +89,7 @@
     <ClInclude Include="droid_sans_font.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="main.h">
+    <ClInclude Include="OpenVR-Display-Devices.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="notifications.h">

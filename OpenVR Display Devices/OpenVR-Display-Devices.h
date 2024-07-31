@@ -3,6 +3,10 @@
 #include "config.h"
 #include "configuration.h"
 
+#define EIGEN_MPL2_ONLY
+#define WIN32_LEAN_AND_MEAN
+#include <SDKDDKVer.h>
+
 // Includes (order matters for GL3W/GLFW3)
 #include "GL/gl3w.h"
 #include <GLFW/glfw3.h>

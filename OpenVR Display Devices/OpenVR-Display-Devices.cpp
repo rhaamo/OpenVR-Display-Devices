@@ -1,4 +1,4 @@
-#include "main.h"
+#include "OpenVR-Display-Devices.h"
 
 AppConfig application_configuration;
 
