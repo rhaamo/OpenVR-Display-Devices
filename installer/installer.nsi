@@ -94,14 +94,14 @@ Section "Install" SecInstall
 	SetOutPath "$INSTDIR"
 
 	File "..\LICENSE"
-	File "..\x64\Release\OpenVR Display Devices.exe"
+	File "..\x64\Release\OpenVR-Display-Devices.exe"
 	File "..\3rdparty\openvr\bin\win64\openvr_api.dll"
-	File "..\OpenVR Display Devices\manifest.vrmanifest"
+	File "..\OpenVR-Display-Devices\manifest.vrmanifest"
 
 	ExecWait '"$INSTDIR\vcredist_x64.exe" /install /quiet'
 	
 	Var /GLOBAL vrRuntimePath
-	nsExec::ExecToStack '"$INSTDIR\OpenVR Display Devices.exe" -openvrpath'
+	nsExec::ExecToStack '"$INSTDIR\OpenVR-Display-Devices.exe" -openvrpath'
 	Pop $0
 	Pop $vrRuntimePath
 	DetailPrint "VR runtime path: $vrRuntimePath"
@@ -112,10 +112,10 @@ Section "Install" SecInstall
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\OpenVRDisplayDevices" "DisplayName" "OpenVR-DisplayDevices"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\OpenVRDisplayDevices" "UninstallString" "$\"$INSTDIR\Uninstall.exe$\""
 
-	CreateShortCut "$SMPROGRAMS\OpenVR-DisplayDevices.lnk" "$INSTDIR\OpenVR Display Devices.exe"
+	CreateShortCut "$SMPROGRAMS\OpenVR-DisplayDevices.lnk" "$INSTDIR\OpenVR-Display-Devices.exe"
 	
 	SetOutPath "$INSTDIR"
-	nsExec::ExecToLog '"$INSTDIR\OpenVR Display Devices.exe" -installmanifest'
+	nsExec::ExecToLog '"$INSTDIR\OpenVR-Display-Devices.exe" -installmanifest'
 
 SectionEnd
 
@@ -131,10 +131,10 @@ Section "Uninstall"
 		Abort
 	
 	SetOutPath "$INSTDIR"
-	nsExec::ExecToLog '"$INSTDIR\OpenVR Display Devices.exe" -removemanifest'
+	nsExec::ExecToLog '"$INSTDIR\OpenVR-Display-Devices.exe" -removemanifest'
 
 	Delete "$INSTDIR\LICENSE"
-	Delete "$INSTDIR\OpenVR Display Devices.exe"
+	Delete "$INSTDIR\OpenVR-Display-Devices.exe"
 	Delete "$INSTDIR\openvr_api.dll"
 	Delete "$INSTDIR\manifest.vrmanifest"
 	
