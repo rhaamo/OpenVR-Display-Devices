@@ -96,7 +96,7 @@ Section "Install" SecInstall
 	File "..\LICENSE"
 	File "..\x64\Release\OpenVR-Display-Devices.exe"
 	File "..\3rdparty\openvr\bin\win64\openvr_api.dll"
-	File "..\OpenVR-Display-Devices\manifest.vrmanifest"
+	File "..\OpenVR Display Devices\manifest.vrmanifest"
 
 	ExecWait '"$INSTDIR\vcredist_x64.exe" /install /quiet'
 	
