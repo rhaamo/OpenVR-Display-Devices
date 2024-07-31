@@ -155,7 +155,7 @@
     <ClCompile Include="..\3rdparty\imgui\imgui_widgets.cpp" />
     <ClCompile Include="..\3rdparty\PlatformFolders\sago\platform_folders.cpp" />
     <ClCompile Include="..\3rdparty\WinToast\src\wintoastlib.cpp" />
-    <ClCompile Include="BatteryChecker.cpp" />
+    <ClCompile Include="battery_checker.cpp" />
     <ClCompile Include="configuration.cpp" />
     <ClCompile Include="droid_sans_font.cpp" />
     <ClCompile Include="OpenVR-Display-Devices.cpp" />
@@ -164,11 +164,10 @@
     <ClCompile Include="Webchaussette.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BatteryChecker.h" />
+    <ClInclude Include="battery_checker.h" />
     <ClInclude Include="config.h" />
     <ClInclude Include="configuration.h" />
     <ClInclude Include="droid_sans_font.h" />
-    <ClInclude Include="OpenVR-Display-Devices.h" />
     <ClInclude Include="notifications.h" />
     <ClInclude Include="user_interface.h" />
     <ClInclude Include="Webchaussette.h" />

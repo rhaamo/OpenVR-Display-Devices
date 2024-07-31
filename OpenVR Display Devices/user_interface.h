@@ -3,9 +3,7 @@
 #include "config.h"
 #include "configuration.h"
 #include "notifications.h"
-#include "BatteryChecker.h"
-
-#include <windows.h>
+#include "battery_checker.h"
 
 #include <imgui.h>
 #include <openvr.h>

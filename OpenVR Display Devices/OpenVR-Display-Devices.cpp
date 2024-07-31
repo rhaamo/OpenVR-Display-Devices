@@ -1,4 +1,22 @@
-#include "OpenVR-Display-Devices.h"
+#include "config.h"
+#include "configuration.h"
+#include "droid_sans_font.h"
+#include "notifications.h"
+#include "user_interface.h"
+
+#include <imgui.h>
+#include <imgui_internal.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
+#include <GL/gl3w.h>
+#include <GLFW/glfw3.h>
+#include <openvr.h>
+#include <direct.h>
+#include <chrono>
+#include <thread>
+#include <iostream>
+
+
 
 AppConfig application_configuration;
 
@@ -69,7 +87,9 @@ void CreateGLFWWindow() {
 	gl3wInit();
 
 	// Minimize the window on start if enabled
-	// glfwIconifyWindow(glfwWindow);
+#ifndef _DEBUG
+	 glfwIconifyWindow(glfwWindow);
+#endif
 
 	ImGui::CreateContext();
 	ImGuiIO &io = ImGui::GetIO();

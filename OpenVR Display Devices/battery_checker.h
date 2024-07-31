@@ -1,36 +1,34 @@
 #pragma once
 
 #include "config.h"
-#include "configuration.h"
 #include "notifications.h"
-
-#include <openvr.h>
 
 #include <array>
 #include <format>
+#include <iostream>
 
 // Should be plenty sufficient...
-#define MAX_INDEXES 20
+#define BATCHECK_MAX_INDEXES 20
 // Every five minutes
-#define CHECK_EVERY 5 * 60
+#define BATCHECK_CHECK_EVERY 5 * 60
 // Every 10s
-#define CHECK_CHG_EVERY 10
+#define BATCHECK_CHECK_CHG_EVERY 10
 
 class BatteryChecker {
 private:
-	std::array<int, MAX_INDEXES> gauges;
-	std::array<int, MAX_INDEXES> gaugesPrev;
-	std::array<std::string, MAX_INDEXES> gaugesNames;
-	std::array<bool, MAX_INDEXES> gaugesCharging;
-	std::array<bool, MAX_INDEXES> gaugesChargingPrev;
-	std::array<time_t, MAX_INDEXES> gaugesChargingChangeTime;
+	std::array<int, BATCHECK_MAX_INDEXES> gauges;
+	std::array<int, BATCHECK_MAX_INDEXES> gaugesPrev;
+	std::array<std::string, BATCHECK_MAX_INDEXES> gaugesNames;
+	std::array<bool, BATCHECK_MAX_INDEXES> gaugesCharging;
+	std::array<bool, BATCHECK_MAX_INDEXES> gaugesChargingPrev;
+	std::array<time_t, BATCHECK_MAX_INDEXES> gaugesChargingChangeTime;
 	time_t lastCheck;
 
 	bool validIndex(int index) {
 		if (gauges.empty() || gaugesPrev.empty()) {
 			return false;
 		}
-		if (index > MAX_INDEXES) {
+		if (index > BATCHECK_MAX_INDEXES) {
 			return false;
 		}
 		if (index > gauges.size()) {
@@ -38,6 +36,7 @@ private:
 		}
 		return true;
 	}
+
 	void dispatchLowNotification(int index) {
 		std::string title = "Low tracker battery !";
 		std::string content = std::format("Tracker {} is low on battery: {}%", gaugesNames[index], gauges[index]).c_str();
@@ -82,10 +81,10 @@ public:
 		gaugesChargingPrev.fill(false);
 		gaugesChargingChangeTime.fill(time(0));
 		lastCheck = time(0);
-	}
+	};
 	~BatteryChecker() {
-		delete &gauges;
-	}
+	};
+
 	void updateGauge(int index, int value, std::string role, bool charging) {
 		// Set previous value with current value
 		gaugesPrev[index] = gauges[index];
@@ -102,6 +101,7 @@ public:
 		}
 		gaugesCharging[index] = charging;
 	}
+	
 	bool isWarn(int index) {
 		if (!validIndex(index)) {
 			return false;
@@ -109,6 +109,7 @@ public:
 
 		return (gauges[index] > application_configuration.batteryLow && gauges[index] <= application_configuration.batteryWarn);
 	}
+
 	bool isLow(int index) {
 		if (!validIndex(index)) {
 			return false;
@@ -116,6 +117,7 @@ public:
 
 		return (gauges[index] <= application_configuration.batteryLow);
 	}
+
 	void checkGaugeAndDispatchNotifications(int index, bool isHmd) {
 		// First check we have a valid index
 		if (!validIndex(index)) {
@@ -124,7 +126,7 @@ public:
 		}
 
 		// Do a check only if lastCheck interval matches
-		if (difftime(time(0), lastCheck) >= CHECK_EVERY) {
+		if (difftime(time(0), lastCheck) >= BATCHECK_CHECK_EVERY) {
 			if (gaugesCharging[index] && (gauges[index] < gaugesPrev[index]) && (gaugesPrev[index] != -99)) {
 				// if charging && val < prevVal && prevVal != -99, then we are discharging while charging
 				dispatchSlowChargeNotification(index);
@@ -141,8 +143,8 @@ public:
 		}
 
 		if (application_configuration.alertHmdCycling) {
-		// Every X minutes, check for the state change
-			if (isHmd && (gaugesChargingPrev[index] != gaugesCharging[index]) && (difftime(time(0), gaugesChargingChangeTime[index]) >= CHECK_CHG_EVERY)) {
+			// Every X minutes, check for the state change
+			if (isHmd && (gaugesChargingPrev[index] != gaugesCharging[index]) && (difftime(time(0), gaugesChargingChangeTime[index]) >= BATCHECK_CHECK_CHG_EVERY)) {
 				dispatchChargeWarn(index);
 				// Reset time
 				gaugesChargingChangeTime[index] = time(0);
@@ -154,4 +156,3 @@ public:
 		// Do nothing as we still haven't waited enough
 	}
 };
-

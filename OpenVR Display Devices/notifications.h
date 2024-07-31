@@ -6,6 +6,9 @@
 #include <codecvt>
 #include <nlohmann/json.hpp>
 
+#include <iostream>
+#include <string>
+
 #define XSOVERLAY_WS "ws://localhost:42070/?client=OVRDisplayDevices"
 #define XSOVERLAY_WS_HOST "localhost"
 #define XSOVERLAY_WS_PORT 42070
