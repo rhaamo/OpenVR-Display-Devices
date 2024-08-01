@@ -343,13 +343,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 		loadOrInitConfiguration(application_configuration);
 		if (application_configuration.notificationsWindows) {
 			enableWindowsNotifications();
-		} else {
-			disableWindowsNotifications();
 		}
 		if (application_configuration.notificationsXsOverlay) {
 			enableXsOverlayNotifications();
-		} else {
-			disableXsOverlayNotifications();
 		}
 
 		if (!application_configuration.loaded) {
