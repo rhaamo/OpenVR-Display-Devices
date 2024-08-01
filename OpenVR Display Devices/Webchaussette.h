@@ -64,11 +64,16 @@ private:
 	}
 
 	std::future<void> do_stop() {
-		return dispatch(_ws.get_executor(), std::packaged_task<void()>([this] {
-			_stopped = true;
-			_ws.next_layer().cancel();
-			_ws.close(websocket::normal);
-																	   }));
+		// we need to check if the websocket is running before trying to close() it...
+		if (_ws.is_open()) {
+			return dispatch(_ws.get_executor(), std::packaged_task<void()>([this] {
+				_stopped = true;
+				_ws.next_layer().cancel();
+				_ws.close(websocket::normal);
+																		   }));
+		} else {
+			std::cout << "Cannot stop a non-open websocket duh" << std::endl;
+		}
 	}
 
 	net::awaitable<void> do_connect() {

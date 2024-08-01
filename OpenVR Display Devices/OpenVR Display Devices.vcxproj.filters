@@ -72,10 +72,10 @@
     <ClCompile Include="..\3rdparty\WinToast\src\wintoastlib.cpp">
       <Filter>Fichiers sources\WinToast</Filter>
     </ClCompile>
-    <ClCompile Include="BatteryChecker.cpp">
+    <ClCompile Include="Webchaussette.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Webchaussette.cpp">
+    <ClCompile Include="battery_checker.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -89,19 +89,16 @@
     <ClInclude Include="droid_sans_font.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="OpenVR-Display-Devices.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="notifications.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="user_interface.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="BatteryChecker.h">
+    <ClInclude Include="Webchaussette.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Webchaussette.h">
+    <ClInclude Include="battery_checker.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
