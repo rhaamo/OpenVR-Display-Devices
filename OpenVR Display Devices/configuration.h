@@ -20,7 +20,7 @@ struct AppConfig {
 	bool alertHmdCycling = false;
 
 	// Config section notifications
-	bool notificationsWindows = false; // not implemented yet
+	bool notificationsSound = false; // not implemented yet
 	bool notificationsXsOverlay = false;
 };
 
