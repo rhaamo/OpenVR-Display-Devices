@@ -32,8 +32,10 @@ double lastFrameStartTime = glfwGetTime();
 #pragma comment(linker,"\"/manifestdependency:type='win32' \
 name='Microsoft.Windows.Common-Controls' version='6.0.0.0' \
 processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
-extern "C" __declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
-extern "C" __declspec(dllexport) DWORD AmdPowerXpressRequestHighPerformance = 0x00000001;
+//extern "C" __declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
+//extern "C" __declspec(dllexport) DWORD AmdPowerXpressRequestHighPerformance = 0x00000001;
+
+//extern void ActivateMultipleDrivers();
 
 void CreateConsole() {
 	static bool created = false;
@@ -66,6 +68,8 @@ void InitVR() {
 	} else if (!vr::VR_IsInterfaceVersionValid(vr::IVROverlay_Version)) {
 		throw std::runtime_error("OpenVR error: Outdated IVROverlay_Version");
 	}
+
+	//ActivateMultipleDrivers();
 }
 
 void CreateGLFWWindow() {
@@ -77,7 +81,7 @@ void CreateGLFWWindow() {
 	fboTextureWidth = 1600;
 	fboTextureHeight = 800;
 
-	glfwWindow = glfwCreateWindow(fboTextureWidth, fboTextureHeight, "OpenVR-Display-Devices", NULL, NULL);
+	glfwWindow = glfwCreateWindow(fboTextureWidth, fboTextureHeight, OPENVR_APPLICATION_NAME/*"OpenVR-Display-Devices"*/, NULL, NULL);
 	if (!glfwWindow) {
 		throw std::runtime_error("Failed to create window");
 	}
@@ -87,9 +91,9 @@ void CreateGLFWWindow() {
 	gl3wInit();
 
 	// Minimize the window on start if enabled
-#ifndef _DEBUG
-	 glfwIconifyWindow(glfwWindow);
-#endif
+//#ifndef _DEBUG
+	 //glfwIconifyWindow(glfwWindow);
+//#endif
 
 	ImGui::CreateContext();
 	ImGuiIO &io = ImGui::GetIO();
@@ -121,6 +125,75 @@ void CreateGLFWWindow() {
 	}
 }
 
+extern BatteryChecker batteryChecker;
+std::string overlayThumbnailCurrent = "";
+
+void UpdateOverlayIcon() {
+	if (!vr::VROverlay() || !overlayThumbnailHandle)
+	{
+		return;
+	}
+
+	std::string iconPath = cwd;
+
+	if (batteryChecker.hmdCharging)
+	{
+		if (batteryChecker.hmdCharge > 80)
+		{
+			iconPath += "\\icons\\c100.png";
+		}
+		else if (batteryChecker.hmdCharge > 60)
+		{
+			iconPath += "\\icons\\c80.png";
+		}
+		else if (batteryChecker.hmdCharge > 40)
+		{
+			iconPath += "\\icons\\c60.png";
+		}
+		else if (batteryChecker.hmdCharge > 20)
+		{
+			iconPath += "\\icons\\c40.png";
+		}
+		else
+		{
+			iconPath += "\\icons\\c20.png";
+		}
+	}
+	else
+	{
+		if (batteryChecker.hmdCharge > 80) 
+		{
+			iconPath += "\\icons\\100.png";
+		} 
+		else if (batteryChecker.hmdCharge > 60) 
+		{
+			iconPath += "\\icons\\80.png";
+		} 
+		else if (batteryChecker.hmdCharge > 40) 
+		{
+			iconPath += "\\icons\\60.png";
+		} 
+		else if (batteryChecker.hmdCharge > 20) 
+		{
+			iconPath += "\\icons\\40.png";
+		} 
+		else 
+		{
+			iconPath += "\\icons\\20.png";
+		}
+	}
+
+	if (overlayThumbnailCurrent == iconPath.c_str())
+	{// Unchanged...
+		return;
+	}
+
+	//printf("icon : %s\n", iconPath.c_str());
+	vr::VROverlay()->ClearOverlayTexture(overlayThumbnailHandle);
+	vr::VROverlay()->SetOverlayFromFile(overlayThumbnailHandle, iconPath.c_str());
+	overlayThumbnailCurrent = iconPath.c_str();
+}
+
 void TryCreateVROverlay() {
 	if (overlayMainHandle || !vr::VROverlay()) {
 		return;
@@ -139,9 +212,34 @@ void TryCreateVROverlay() {
 	vr::VROverlay()->SetOverlayWidthInMeters(overlayMainHandle, 3.0f);
 	vr::VROverlay()->SetOverlayInputMethod(overlayMainHandle, vr::VROverlayInputMethod_Mouse);
 	vr::VROverlay()->SetOverlayFlag(overlayMainHandle, vr::VROverlayFlags_SendVRDiscreteScrollEvents, true);
-
-	// can set icon here but idc lol
+	UpdateOverlayIcon();
 }
+
+/*void ActivateMultipleDrivers() {
+	vr::EVRSettingsError vrSettingsError;
+	bool enabled = vr::VRSettings()->GetBool(vr::k_pch_SteamVR_Section, vr::k_pch_SteamVR_ActivateMultipleDrivers_Bool, &vrSettingsError);
+
+	if (vrSettingsError != vr::VRSettingsError_None) {
+		std::string err = "Could not read \"" + std::string(vr::k_pch_SteamVR_ActivateMultipleDrivers_Bool) + "\" setting: "
+			+ vr::VRSettings()->GetSettingsErrorNameFromEnum(vrSettingsError);
+
+		throw std::runtime_error(err);
+	}
+
+	if (!enabled) {
+		vr::VRSettings()->SetBool(vr::k_pch_SteamVR_Section, vr::k_pch_SteamVR_ActivateMultipleDrivers_Bool, true, &vrSettingsError);
+		if (vrSettingsError != vr::VRSettingsError_None) {
+			std::string err = "Could not set \"" + std::string(vr::k_pch_SteamVR_ActivateMultipleDrivers_Bool) + "\" setting: "
+				+ vr::VRSettings()->GetSettingsErrorNameFromEnum(vrSettingsError);
+
+			throw std::runtime_error(err);
+		}
+
+		std::cerr << "Enabled \"" << vr::k_pch_SteamVR_ActivateMultipleDrivers_Bool << "\" setting" << std::endl;
+	} else {
+		std::cerr << "\"" << vr::k_pch_SteamVR_ActivateMultipleDrivers_Bool << "\" setting previously enabled" << std::endl;
+	}
+}*/
 
 void RunLoop() {
 	while (!glfwWindowShouldClose(glfwWindow)) {
@@ -154,7 +252,7 @@ void RunLoop() {
 
 		if (overlayMainHandle && vr::VROverlay()) {
 			auto &io = ImGui::GetIO();
-			dashboardVisible = vr::VROverlay()->IsActiveDashboardOverlay(overlayMainHandle);
+			dashboardVisible = vr::VROverlay()->IsActiveDashboardOverlay(overlayMainHandle) || vr::VROverlay()->IsDashboardVisible();
 
 			vr::VREvent_t vrEvent;
 			while (vr::VROverlay()->PollNextOverlayEvent(overlayMainHandle, &vrEvent, sizeof(vrEvent))) {
@@ -180,7 +278,8 @@ void RunLoop() {
 				}
 			}
 
-			if (windowVisible || dashboardVisible) {
+			//if (windowVisible || dashboardVisible) 
+			{
 				auto &io = ImGui::GetIO();
 				io.DisplaySize = ImVec2((float)fboTextureWidth, (float)fboTextureHeight);
 				io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
@@ -189,6 +288,7 @@ void RunLoop() {
 				if (dashboardVisible) {
 					io.ConfigFlags = io.ConfigFlags | ImGuiConfigFlags_NoMouseCursorChange;
 				}
+				
 				ImGui_ImplOpenGL3_NewFrame();
 				ImGui_ImplGlfw_NewFrame();
 				ImGui::NewFrame();
@@ -215,19 +315,37 @@ void RunLoop() {
 				if (dashboardVisible) {
 					vr::Texture_t vrTex;
 					vrTex.eType = vr::TextureType_OpenGL;
-					vrTex.eColorSpace = vr::ColorSpace_Auto;
+					//vrTex.eColorSpace = vr::ColorSpace_Auto;
+					vrTex.eColorSpace = vr::ColorSpace_Linear;
 
 					vrTex.handle = (void *)
 #if defined _WIN64 || defined _LP64
 					(uint64_t)
 #endif
 						fboTextureHandle;
+					
+
+					//vrTex.handle = reinterpret_cast<void *>(static_cast<uintptr_t>(fboTextureHandle));
+
+					vr::VROverlay()->ClearOverlayTexture(overlayMainHandle);
+					vr::VROverlay()->SetOverlayTexture(overlayMainHandle, &vrTex);
+					//vr::VROverlay()->SetOverlayAlpha(overlayMainHandle, 1.0f);
+
+					//vr::VROverlay()->ClearOverlayTexture(overlayMainHandle);
+					//vr::VROverlay()->SetOverlayFromFile(overlayMainHandle, overlayThumbnailCurrent.c_str());
+
+					/*vr::Texture_t texture = {(void *)(uintptr_t)&fboTextureHandle, vr::TextureType_OpenGL, vr::ColorSpace_Auto};
+					vr::VROverlay()->SetOverlayTexture(overlayMainHandle, &texture);*/
 
 					vr::HmdVector2_t mouseScale = { (float)fboTextureWidth, (float)fboTextureHeight };
-
-					vr::VROverlay()->SetOverlayTexture(overlayMainHandle, &vrTex);
 					vr::VROverlay()->SetOverlayMouseScale(overlayMainHandle, &mouseScale);
+
+					//printf("Overlay set to texture %I64u. Resolution %i x %i.\n", (uint64_t)vrTex.handle, fboTextureWidth, fboTextureHeight);
 				}
+			}
+
+			if (vr::VROverlay()->IsDashboardVisible()) {
+				UpdateOverlayIcon();
 			}
 
 			const double dashboardInterval = 1.0 / 90.0; // fps
@@ -341,8 +459,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
 		// Load config then do post-config setup if needed
 		loadOrInitConfiguration(application_configuration);
-		if (application_configuration.notificationsWindows) {
-			enableWindowsNotifications();
+		if (application_configuration.notificationsSound) {
+			enableSoundNotifications();
 		}
 		if (application_configuration.notificationsXsOverlay) {
 			enableXsOverlayNotifications();
@@ -353,8 +471,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 		}
 		RunLoop();
 
-		if (application_configuration.notificationsWindows) {
-			disableWindowsNotifications();
+		if (application_configuration.notificationsSound) {
+			disableSoundNotifications();
 		}
 		if (application_configuration.notificationsXsOverlay) {
 			disableXsOverlayNotifications();

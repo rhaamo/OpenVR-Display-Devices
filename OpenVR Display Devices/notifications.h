@@ -9,9 +9,13 @@
 #include <iostream>
 #include <string>
 
-#define XSOVERLAY_WS "ws://localhost:42070/?client=OVRDisplayDevices"
+/*#define XSOVERLAY_WS "ws://localhost:42070/?client=OVRDisplayDevices"
 #define XSOVERLAY_WS_HOST "localhost"
 #define XSOVERLAY_WS_PORT 42070
+#define XSOVERLAY_WS_QUERY "?client=OVRDisplayDevices"*/
+#define XSOVERLAY_WS "ws://localhost:12070/?client=OVRDisplayDevices"
+#define XSOVERLAY_WS_HOST "localhost"
+#define XSOVERLAY_WS_PORT 12070
 #define XSOVERLAY_WS_QUERY "?client=OVRDisplayDevices"
 
 #include <wintoastlib.h>
@@ -48,11 +52,11 @@ public:
 	}
 };
 
-void enableWindowsNotifications();
-void disableWindowsNotifications();
+void enableSoundNotifications();
+void disableSoundNotifications();
 void enableXsOverlayNotifications();
 void disableXsOverlayNotifications();
 void sendNotification(std::string &title, std::string &msg);
 void sendXsOverlayNotification(std::string &title, std::string &msg);
-void sendNativeNotification(std::string &title, std::string &msg);
+void sendSoundNotifications(std::string &title, std::string &msg);
 std::string buildXsOverlayJson(std::string title, std::string content);

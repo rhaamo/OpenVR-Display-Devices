@@ -8,11 +8,11 @@
 #include <iostream>
 
 // Should be plenty sufficient...
-#define BATCHECK_MAX_INDEXES 20
+#define BATCHECK_MAX_INDEXES 50
 // Every five minutes
-#define BATCHECK_CHECK_EVERY 5 * 60
-// Every 10s
-#define BATCHECK_CHECK_CHG_EVERY 10
+#define BATCHECK_CHECK_EVERY 10 //5 * 60
+// Every 10s - uq: 5 secs
+#define BATCHECK_CHECK_CHG_EVERY 5
 
 class BatteryChecker {
 private:
@@ -38,34 +38,34 @@ private:
 	}
 
 	void dispatchLowNotification(int index) {
-		std::string title = "Low tracker battery !";
-		std::string content = std::format("Tracker {} is low on battery: {}%", gaugesNames[index], gauges[index]).c_str();
+		std::string title = "Low battery!";
+		std::string content = std::format("Device {} is low on battery: {}%", gaugesNames[index], gauges[index]).c_str();
 
-		std::cout << "LOW battery for tracker '" << gaugesNames[index] << "' id " << index << " level: " << gauges[index] << std::endl;
+		std::cout << "LOW battery for device '" << gaugesNames[index] << "' id " << index << " level: " << gauges[index] << std::endl;
 		sendNotification(title, content);
 	}
 	void dispatchWarnNotification(int index) {
-		std::string title = "Tracker battery warning !";
-		std::string content = std::format("Tracker {} battery warning: {}%", gaugesNames[index], gauges[index]).c_str();
+		std::string title = "Battery warning!";
+		std::string content = std::format("Device {} battery warning: {}%", gaugesNames[index], gauges[index]).c_str();
 
-		std::cout << "WARN battery for tracker '" << gaugesNames[index] << "' id " << index << " level: " << gauges[index] << std::endl;
+		std::cout << "WARN battery for device '" << gaugesNames[index] << "' id " << index << " level: " << gauges[index] << std::endl;
 		sendNotification(title, content);
 	}
 	void dispatchSlowChargeNotification(int index) {
-		std::string title = "Slow charge tracker battery !";
-		std::string content = std::format("Tracker {} charging too slowly ! {}%", gaugesNames[index], gauges[index]).c_str();
+		std::string title = "Slow charge battery!";
+		std::string content = std::format("Device {} is charging too slowly ! {}%", gaugesNames[index], gauges[index]).c_str();
 
-		std::cout << "WARN charging too slow for tracker '" << gaugesNames[index] << "' id " << index << " level: " << gauges[index] << std::endl;
+		std::cout << "WARN charging too slow for device '" << gaugesNames[index] << "' id " << index << " level: " << gauges[index] << std::endl;
 		sendNotification(title, content);
 	}
 	void dispatchChargeWarn(int index) {
 		std::string title, content;
 		if (gaugesCharging[index]) {
-			title = "HMD is now charging";
-			content = std::format("HMD is now charging");
+			title = "Headset is now charging";
+			content = std::format("");
 		} else {
-			title = "HMD not charging !";
-			content = std::format("WOOP WOOP PLS CHECK CABLE");
+			title = "Headset is not charging!";
+			content = std::format("Check the headset battery.");
 		}
 
 		std::cout << "HMD Charge changed from " << gaugesChargingPrev[index] << " to " << gaugesCharging[index] << std::endl;
@@ -84,6 +84,9 @@ public:
 	};
 	~BatteryChecker() {
 	};
+
+	bool hmdCharging = false;
+	int hmdCharge = 0;
 
 	void updateGauge(int index, int value, std::string role, bool charging) {
 		// Set previous value with current value
@@ -152,6 +155,13 @@ public:
 				gaugesChargingPrev[index] = gaugesCharging[index];
 			}
 		}
+
+		if (isHmd)
+		{// Update global-accessable value so we can update the icon for charing and charge level...
+			hmdCharging = gaugesCharging[index];
+			hmdCharge = gauges[index];
+		}
+
 
 		// Do nothing as we still haven't waited enough
 	}

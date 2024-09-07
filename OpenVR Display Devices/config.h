@@ -1,7 +1,9 @@
 #pragma once
 
 // lol
+#ifndef UNICODE
 #define UNICODE
+#endif
 
 // To avoid windows.h to redefine min() and max()
 #define NOMINMAX

@@ -1,8 +1,9 @@
 #include "notifications.h"
+#include <sapi.h>
 
-Webchaussette wsClient(XSOVERLAY_WS_HOST, XSOVERLAY_WS_PORT, XSOVERLAY_WS_QUERY);
+//Webchaussette wsClient(XSOVERLAY_WS_HOST, XSOVERLAY_WS_PORT, XSOVERLAY_WS_QUERY);
 
-void enableWindowsNotifications() {
+void enableSoundNotifications() {
 	if (!WinToastLib::WinToast::isCompatible()) {
 		throw std::runtime_error("System incompatible :(");
 	}
@@ -13,24 +14,25 @@ void enableWindowsNotifications() {
 		throw std::runtime_error("Woops, error when initializing the WinToaster");
 	}
 
-	std::string title = "Test notification";
+	/*std::string title = "Test notification";
 	std::string content = "nya~ :3";
 
-	sendNativeNotification(title, content);
-	std::cout << "Enabled toaster notifications" << std::endl;
+	sendSoundNotifications(title, content);
+	std::cout << "Enabled toaster notifications" << std::endl;*/
 }
 
-void disableWindowsNotifications() {
+void disableSoundNotifications() {
 	// Nothing to do here
 }
 
 void enableXsOverlayNotifications() {
-	wsClient.Start();
+	/*wsClient.Start();
 
 	std::string title = "Test notification";
 	std::string content = "nya~ :3";
 	sendXsOverlayNotification(title, content);
 	std::cout << "Enabled XSOverlay notifications" << std::endl;
+	*/
 }
 
 std::string buildXsOverlayJson(std::string title, std::string content) {
@@ -58,15 +60,28 @@ std::string buildXsOverlayJson(std::string title, std::string content) {
 }
 
 void disableXsOverlayNotifications() {
-	wsClient.Stop();
+	//wsClient.Stop();
 }
 
 std::wstring charToWstring(const char *src) {
 	return std::wstring(src, src + strlen(src));
 }
 
-void sendNativeNotification(std::string &title, std::string &msg) {
-	WinToastLib::WinToastTemplate::AudioOption audioOptions = WinToastLib::WinToastTemplate::AudioOption::Default;
+wchar_t *CharToWchar(const char *str) {
+	int lenW, lenA = lstrlenA(str);
+	wchar_t *unicodestr;
+
+	lenW = MultiByteToWideChar(CP_ACP, 0, str, lenA, NULL, 0);
+	if (lenW > 0) {
+		unicodestr = SysAllocStringLen(0, lenW);
+		MultiByteToWideChar(CP_ACP, 0, str, lenA, unicodestr, lenW);
+		return unicodestr;
+	}
+	return NULL;
+}
+
+void sendSoundNotifications(std::string &title, std::string &msg) {
+	/*WinToastLib::WinToastTemplate::AudioOption audioOptions = WinToastLib::WinToastTemplate::AudioOption::Default;
 
 	WinToastLib::WinToastTemplate templ(WinToastLib::WinToastTemplate::Text02);
 	// Title
@@ -77,18 +92,51 @@ void sendNativeNotification(std::string &title, std::string &msg) {
 	// templ.setExpiration(5);
 	if (WinToastLib::WinToast::instance()->showToast(templ, new CustomHandler()) < 0) {
 		throw std::runtime_error("Woops, cannot toast :(");
+	}*/
+
+	ISpVoice *pVoice = NULL;
+
+	/*if (FAILED(::CoInitialize(NULL))) {
+		std::cout << "SAPI failed to initialize." << std::endl;
+		return;
+	}*/
+
+	//std::string speakText = title + "\n\n" + msg;
+	std::string speakText = title;
+
+	HRESULT hr = CoCreateInstance(CLSID_SpVoice, NULL, CLSCTX_ALL, IID_ISpVoice, (void **)&pVoice);
+	if (SUCCEEDED(hr)) {
+		//hr = pVoice->Speak(L"Hello world", 0, NULL);
+		//hr = pVoice->Speak(speakText.c_str(), 0, NULL);
+
+		/*wchar_t *wtext;
+		wtext = malloc(speakText.length() * sizeof(wchar_t));
+		mbstowcs(wtext, speakText.c_str(), speakText.length());//includes null
+		LPWSTR ptr = wtext;
+		hr = pVoice->Speak(ptr, 0, NULL);
+		free(wtext);
+		*/
+		wchar_t *text = CharToWchar(speakText.c_str());
+		hr = pVoice->Speak(text, 0, NULL);
+
+		pVoice->Release();
+		pVoice = NULL;
+	}
+	else
+	{
+		std::cout << "SAPI failed to create instance." << std::endl;
 	}
 }
 
 void sendXsOverlayNotification(std::string &title, std::string &msg) {
 	std::string jmsg = buildXsOverlayJson(title, msg);
-	wsClient.Send(jmsg);
+	//wsClient.Send(jmsg);
 }
 
 void sendNotification(std::string &title, std::string &msg) {
-	if (application_configuration.notificationsWindows) {
+	if (application_configuration.notificationsSound) {
 		std::cout << "SN: " << title << std::endl;
-		sendNativeNotification(title, msg);
+		sendSoundNotifications(title, msg);
 	}
 	if (application_configuration.notificationsXsOverlay) {
 		sendXsOverlayNotification(title, msg);

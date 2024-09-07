@@ -4,9 +4,9 @@ static bool runningInOverlay;
 static const ImGuiWindowFlags bareWindowFlags =
 ImGuiWindowFlags_NoTitleBar |
 ImGuiWindowFlags_NoResize |
-ImGuiWindowFlags_NoMove |
+ImGuiWindowFlags_NoMove /* |
 ImGuiWindowFlags_NoScrollbar |
-ImGuiWindowFlags_NoScrollWithMouse |
+ImGuiWindowFlags_NoScrollWithMouse*/ |
 ImGuiWindowFlags_NoCollapse;
 
 BatteryChecker batteryChecker;
@@ -112,7 +112,7 @@ void Show_StatusTable() {
 
 				if (pError != vr::TrackedProp_Success && pError != vr::TrackedProp_UnknownProperty) {
 					wchar_t message[1024];
-					swprintf(message, 1024, L"Could not get Prop_ControllerType of device %i: %s", i, vr::VRSystem()->GetPropErrorNameFromEnum(pError));
+					swprintf(message, 1024, L"Could not get Prop_ControllerType of device %i: %s", i, (wchar_t*)vr::VRSystem()->GetPropErrorNameFromEnum(pError));
 					MessageBox(nullptr, message, L"Runtime Error", 0);
 				}
 
@@ -121,7 +121,7 @@ void Show_StatusTable() {
 				vr::VRSystem()->GetStringTrackedDeviceProperty(i, vr::Prop_SerialNumber_String, serialBuffer, vr::k_unMaxPropertyStringSize, &pError);
 				if (pError != vr::TrackedProp_Success && pError != vr::TrackedProp_UnknownProperty) {
 					wchar_t message[1024];
-					swprintf(message, 1024, L"Could not get Prop_SerialNumber of device %i: %s", i, vr::VRSystem()->GetPropErrorNameFromEnum(pError));
+					swprintf(message, 1024, L"Could not get Prop_SerialNumber of device %i: %s", i, (wchar_t *)vr::VRSystem()->GetPropErrorNameFromEnum(pError));
 					MessageBox(nullptr, message, L"Runtime Error", 0);
 				}
 
@@ -129,20 +129,20 @@ void Show_StatusTable() {
 				float deviceBatteryPercent = vr::VRSystem()->GetFloatTrackedDeviceProperty(i, vr::Prop_DeviceBatteryPercentage_Float, &pError);
 				if (pError != vr::TrackedProp_Success && pError != vr::TrackedProp_UnknownProperty) {
 					wchar_t message[1024];
-					swprintf(message, 1024, L"Could not get Prop_DeviceBatteryPercentage of device %i: %s", i, vr::VRSystem()->GetPropErrorNameFromEnum(pError));
+					swprintf(message, 1024, L"Could not get Prop_DeviceBatteryPercentage of device %i: %s", i, (wchar_t *)vr::VRSystem()->GetPropErrorNameFromEnum(pError));
 					MessageBox(nullptr, message, L"Runtime Error", 0);
 				}
 
 				bool deviceIsCharging = vr::VRSystem()->GetBoolTrackedDeviceProperty(i, vr::Prop_DeviceIsCharging_Bool, &pError);
 				if (pError != vr::TrackedProp_Success && pError != vr::TrackedProp_UnknownProperty) {
 					wchar_t message[1024];
-					swprintf(message, 1024, L"Could not get Prop_DeviceIsCharging of device %i: %s", i, vr::VRSystem()->GetPropErrorNameFromEnum(pError));
+					swprintf(message, 1024, L"Could not get Prop_DeviceIsCharging of device %i: %s", i, (wchar_t *)vr::VRSystem()->GetPropErrorNameFromEnum(pError));
 					MessageBox(nullptr, message, L"Runtime Error", 0);
 				}
 
 				// Fill the state
 				std::string role = roleBuffer;
-				batteryChecker.updateGauge(i, deviceBatteryPercent * 100, role, deviceIsCharging);
+				batteryChecker.updateGauge(i, (int)(deviceBatteryPercent * 100.0f), role, deviceIsCharging);
 				// Then check the status
 				batteryChecker.checkGaugeAndDispatchNotifications(i, (deviceClass == vr::TrackedDeviceClass_HMD));
 
@@ -151,21 +151,21 @@ void Show_StatusTable() {
 				vr::VRSystem()->GetStringTrackedDeviceProperty(i, vr::Prop_ManufacturerName_String, manufacturerBuffer, vr::k_unMaxPropertyStringSize, &pError);
 				if (pError != vr::TrackedProp_Success && pError != vr::TrackedProp_UnknownProperty) {
 					wchar_t message[1024];
-					swprintf(message, 1024, L"Could not get Prop_ManufacturerName of device %i: %s", i, vr::VRSystem()->GetPropErrorNameFromEnum(pError));
+					swprintf(message, 1024, L"Could not get Prop_ManufacturerName of device %i: %s", i, (wchar_t *)vr::VRSystem()->GetPropErrorNameFromEnum(pError));
 					MessageBox(nullptr, message, L"Runtime Error", 0);
 				}
 				char modelNumberBuffer[vr::k_unMaxPropertyStringSize] = "<ERROR>";
 				vr::VRSystem()->GetStringTrackedDeviceProperty(i, vr::Prop_ModelNumber_String, modelNumberBuffer, vr::k_unMaxPropertyStringSize, &pError);
 				if (pError != vr::TrackedProp_Success && pError != vr::TrackedProp_UnknownProperty) {
 					wchar_t message[1024];
-					swprintf(message, 1024, L"Could not get Prop_ModelNumber of device %i: %s", i, vr::VRSystem()->GetPropErrorNameFromEnum(pError));
+					swprintf(message, 1024, L"Could not get Prop_ModelNumber of device %i: %s", i, (wchar_t *)vr::VRSystem()->GetPropErrorNameFromEnum(pError));
 					MessageBox(nullptr, message, L"Runtime Error", 0);
 				}
 				char trackingSystemBuffer[vr::k_unMaxPropertyStringSize] = "<ERROR>";
 				vr::VRSystem()->GetStringTrackedDeviceProperty(i, vr::Prop_TrackingSystemName_String, trackingSystemBuffer, vr::k_unMaxPropertyStringSize, &pError);
 				if (pError != vr::TrackedProp_Success && pError != vr::TrackedProp_UnknownProperty) {
 					wchar_t message[1024];
-					swprintf(message, 1024, L"Could not get Prop_TrackingSystemName of device %i: %s", i, vr::VRSystem()->GetPropErrorNameFromEnum(pError));
+					swprintf(message, 1024, L"Could not get Prop_TrackingSystemName of device %i: %s", i, (wchar_t *)vr::VRSystem()->GetPropErrorNameFromEnum(pError));
 					MessageBox(nullptr, message, L"Runtime Error", 0);
 				}
 
@@ -269,11 +269,11 @@ void Show_Settings() {
 	}
 
 	ImGui::NewLine();
-	if (ImGui::Checkbox("Windows notifications", &application_configuration.notificationsWindows)) {
-		if (application_configuration.notificationsWindows) {
-			enableWindowsNotifications();
+	if (ImGui::Checkbox("Sound notifications", &application_configuration.notificationsSound)) {
+		if (application_configuration.notificationsSound) {
+			enableSoundNotifications();
 		} else {
-			disableWindowsNotifications();
+			disableSoundNotifications();
 		}
 		saveConfiguration(application_configuration);
 	}
@@ -296,7 +296,7 @@ void Show_Settings() {
 	ImGui::SameLine(0, 1 * ImGui::GetStyle().ItemSpacing.x + 100);
 	if (ImGui::Button("Test notifications", ImVec2(0, 0))) {
 		std::string title = "Test notification";
-		std::string content = "nya nya nya~";
+		std::string content = "";
 		sendNotification(title, content);
 	}
 }
