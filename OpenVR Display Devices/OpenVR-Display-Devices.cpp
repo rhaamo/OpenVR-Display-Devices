@@ -154,7 +154,8 @@ void RunLoop() {
 
 		if (overlayMainHandle && vr::VROverlay()) {
 			auto &io = ImGui::GetIO();
-			dashboardVisible = vr::VROverlay()->IsActiveDashboardOverlay(overlayMainHandle);
+			// https://github.com/hyblocker/OpenVR-SpaceCalibrator/commit/d3adf9840e94a58f4824e0e77c626d267dfa21b0
+			dashboardVisible = vr::VROverlay()->IsActiveDashboardOverlay(overlayMainHandle) || vr::VROverlay()->IsDashboardVisible();
 
 			vr::VREvent_t vrEvent;
 			while (vr::VROverlay()->PollNextOverlayEvent(overlayMainHandle, &vrEvent, sizeof(vrEvent))) {
