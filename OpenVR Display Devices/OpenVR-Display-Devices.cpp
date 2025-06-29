@@ -53,7 +53,7 @@ void GLFWErrorCallback(int error, const char *description) {
 
 void InitVR() {
 	auto initError = vr::VRInitError_None;
-	vr::VR_Init(&initError, vr::VRApplication_Other);
+	vr::VR_Init(&initError, vr::VRApplication_Overlay);
 	if (initError != vr::VRInitError_None) {
 		auto error = vr::VR_GetVRInitErrorAsEnglishDescription(initError);
 		throw std::runtime_error("OpenVR error :" + std::string(error));
