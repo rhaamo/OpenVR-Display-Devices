@@ -9,13 +9,15 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 #include <GL/gl3w.h>
+#define GLFW_EXPOSE_NATIVE_WIN32
 #include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
 #include <openvr.h>
 #include <direct.h>
 #include <chrono>
 #include <thread>
 #include <iostream>
-
+#include <dwmapi.h>
 
 
 AppConfig application_configuration;
@@ -68,11 +70,28 @@ void InitVR() {
 	}
 }
 
+enum DWMA_USE_IMMSERSIVE_DARK_MODE_ENUM {
+	DWMA_USE_IMMERSIVE_DARK_MODE = 20,
+	DWMA_USE_IMMERSIVE_DARK_MODE_PRE_20H1 = 19,
+};
+
+const bool EnableDarkModeTopBar(const HWND windowHwmd) {
+	const BOOL darkBorder = TRUE;
+	const bool ok =
+		SUCCEEDED(DwmSetWindowAttribute(windowHwmd, DWMA_USE_IMMERSIVE_DARK_MODE, &darkBorder, sizeof(darkBorder)))
+		|| SUCCEEDED(DwmSetWindowAttribute(windowHwmd, DWMA_USE_IMMERSIVE_DARK_MODE_PRE_20H1, &darkBorder, sizeof(darkBorder)));
+	return ok;
+}
+
 void CreateGLFWWindow() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, false);
+
+#ifdef _DEBUG
+	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+#endif
 
 	fboTextureWidth = 1600;
 	fboTextureHeight = 800;
@@ -87,9 +106,11 @@ void CreateGLFWWindow() {
 	gl3wInit();
 
 	// Minimize the window on start if enabled
-#ifndef _DEBUG
-	 glfwIconifyWindow(glfwWindow);
-#endif
+	// OK so, for some reasons, minimizing the window breaks it, the components are like 10px wide and no matter you resize the
+	// window, they don't change, I have no idea what the fuck is going on
+	//glfwIconifyWindow(glfwWindow);
+	HWND windowHwmd = glfwGetWin32Window(glfwWindow);
+	EnableDarkModeTopBar(windowHwmd);
 
 	ImGui::CreateContext();
 	ImGuiIO &io = ImGui::GetIO();
